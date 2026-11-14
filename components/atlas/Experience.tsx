@@ -502,7 +502,7 @@ export function Experience() {
             <h2 className="finale__title">See you in {event.city}.</h2>
             <p className="finale__lead">Five days, one choir. Bring your voice.</p>
             {rsvpReady ? (
-              <a className="btn btn--light btn--big" href={event.rsvpUrl} target="_blank" rel="noreferrer">
+              <a className="btn btn--light btn--big" href={event.rsvpUrl}>
                 RSVP now
               </a>
             ) : (
