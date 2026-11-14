@@ -4,11 +4,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { content } from "../content";
 import { PLACES, TOUR, buildArcs, project, toVec, tourAt, type Vec, type View } from "../_lib/globe";
 
-const DOT = "#8f8a9c";
-const SPHERE = "#f3f1f6";
-const HOME = "#18181b";
-const BRAND = "#FF63F9";
-const QUIET = "#71717A";
+const DOT = "#b5b5b5";
+const SPHERE = "#0a0a0a";
+const HOME = "#fbf6ee";
+const BRAND = "#FFB347";
+const QUIET = "#8f8f8f";
 const FLAT_ZOOM = 1.25;
 const TILT = 14;
 const ARC_PERIOD = 3.2;
@@ -60,7 +60,7 @@ function drawArcs(arcs: ReturnType<typeof buildArcs>, f: Frame) {
       if (f.flat > 0.5 && Math.abs(a.x - b.x) > f.size * 0.3) continue;
       const along = (i / last - tail) / Math.max(0.001, head - tail);
       ctx.globalAlpha = arc.steady ? 0.35 : 1;
-      ctx.strokeStyle = arc.steady ? HOME : `rgba(212,48,205,${(0.15 + along * 0.75).toFixed(3)})`;
+      ctx.strokeStyle = arc.steady ? HOME : `rgba(255,179,71,${(0.15 + along * 0.75).toFixed(3)})`;
       ctx.beginPath();
       ctx.moveTo(a.x, a.y);
       ctx.lineTo(b.x, b.y);
@@ -236,9 +236,12 @@ export function Globe({ dots }: { dots: number[] }) {
     io.observe(canvas);
     resize();
     // Flags arrive after first paint; redraw the still frame once they do.
-    if (still) pins.forEach((p) => p.flag.addEventListener("load", () => draw(performance.now())));
+    // The listeners are dropped on unmount so a late flag never draws onto a detached canvas.
+    const flagsLoaded = new AbortController();
+    if (still) pins.forEach((p) => p.flag.addEventListener("load", () => draw(performance.now()), { once: true, signal: flagsLoaded.signal }));
 
     return () => {
+      flagsLoaded.abort();
       cancelAnimationFrame(raf);
       ro.disconnect();
       io.disconnect();

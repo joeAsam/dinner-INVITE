@@ -6,7 +6,6 @@ import { Features } from "./_components/Features";
 import { Footer } from "./_components/Footer";
 import { Hero } from "./_components/Hero";
 import { Nav } from "./_components/Nav";
-import { Pricing } from "./_components/Pricing";
 import { Stats } from "./_components/Stats";
 
 /** Simple View: the Pxxl homepage rebuild, served at /simple in place of the old day list. */
@@ -23,7 +22,6 @@ export default function SimplePage() {
         <Stats />
         <Features />
         <Agent />
-        <Pricing />
         <Datacenters />
         <Faq />
       </main>

@@ -1,12 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, Manrope } from "next/font/google";
+import { Archivo, Geist, JetBrains_Mono, Manrope } from "next/font/google";
 import "./globals.css";
-import "./experience.css";
-import "./experience-states.css";
-import "./choir.css";
 
 const archivo = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-archivo", display: "swap" });
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", display: "swap" });
+// The home page's 3D experience shares the simple view's typefaces: Geist for big headlines and
+// JetBrains Mono for labels (here), Satoshi and Cabinet Grotesk from Fontshare (loaded by app/page.tsx).
+const atlas = Geist({ subsets: ["latin"], weight: ["600"], variable: "--font-atlas-display", display: "swap" });
+const atlasMono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-atlas-mono", display: "swap" });
 
 export const metadata: Metadata = {
   title: "Youth Choir Week 2026 · Eket, Akwa Ibom State",
@@ -14,11 +15,11 @@ export const metadata: Metadata = {
   icons: { icon: "/icon.svg" },
 };
 
-export const viewport: Viewport = { themeColor: "#04060d", colorScheme: "dark" };
+export const viewport: Viewport = { themeColor: "#080b20", colorScheme: "dark" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${archivo.variable} ${manrope.variable}`}>
+    <html lang="en" className={`${archivo.variable} ${manrope.variable} ${atlas.variable} ${atlasMono.variable}`}>
       <body className="antialiased">{children}</body>
     </html>
   );

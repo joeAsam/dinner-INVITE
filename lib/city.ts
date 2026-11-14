@@ -14,10 +14,33 @@ export type CityData = { roads: Road[]; buildings: Building[]; rivers: River[]; 
 
 const shift = (p: number[]) => p.map((v, i) => v + (i % 2 === 0 ? IKOT_OFFSET[0] : IKOT_OFFSET[1]));
 
-/** Gently curving expressway from Eket's western edge to the Ikot Abasi cluster. */
-function linkRoad(): Road {
-  const a: [number, number] = [-3700, 760];
-  const b: [number, number] = [IKOT_OFFSET[0] + 1650, IKOT_OFFSET[1] - 420];
+/**
+ * The main-road junction or bend nearest to a point. Ending a road exactly on an existing point
+ * (not part-way along a stretch) lets a route turn straight onto the next road without overshooting.
+ */
+function snapTo(roads: Road[], x: number, z: number): [number, number] {
+  let best: [number, number] = [x, z];
+  let bestD = Infinity;
+  for (const r of roads) {
+    if (r.r < 2) continue;
+    for (let i = 0; i < r.p.length; i += 2) {
+      const d = (r.p[i] - x) ** 2 + (r.p[i + 1] - z) ** 2;
+      if (d < bestD) {
+        bestD = d;
+        best = [r.p[i], r.p[i + 1]];
+      }
+    }
+  }
+  return best;
+}
+
+/**
+ * Gently curving expressway from Eket's western edge to the Ikot Abasi cluster.
+ * Each end starts on a real main road in its town, so the road (and any route along it) is continuous.
+ */
+function linkRoad(eket: Road[], ikot: Road[]): Road {
+  const a = snapTo(eket, -3700, 760);
+  const b = snapTo(ikot, IKOT_OFFSET[0] + 1650, IKOT_OFFSET[1] - 420);
   const p: number[] = [];
   const n = 60;
   for (let i = 0; i <= n; i++) {
@@ -36,8 +59,9 @@ export function loadCity(): Promise<CityData> {
     .then((m) => {
       const e = m.eket;
       const k = m.ikot;
+      const ikotRoads: Road[] = k.roads.map((r: Road) => ({ ...r, p: shift(r.p) }));
       return {
-        roads: [...e.roads, ...k.roads.map((r: Road) => ({ ...r, p: shift(r.p) })), linkRoad()],
+        roads: [...e.roads, ...ikotRoads, linkRoad(e.roads, ikotRoads)],
         buildings: [...e.buildings, ...k.buildings.map((b: Building) => ({ ...b, p: shift(b.p) }))],
         rivers: [...e.rivers, ...k.rivers.map((r: River) => ({ ...r, p: shift(r.p) }))],
         areas: [...e.areas, ...k.areas.map(shift)],

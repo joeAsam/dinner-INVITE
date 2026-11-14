@@ -1,0 +1,69 @@
+import { SITES } from "./journey";
+
+export type Quality = "low" | "medium" | "high";
+
+/**
+ * Per-frame state shared by the page and the 3D scene. It is a plain mutable object on
+ * purpose: the render loop reads and writes it every frame without re-rendering React.
+ */
+export const world = {
+  /** The stop the visitor has asked for: 0 = overview, 1 to 5 = the days, 6 = finale. */
+  target: 0,
+  /** Set with a new target to arrive at once instead of flying (deep links, reduced motion). */
+  snap: false,
+  /** The flight in progress: which stops it joins and how far along it is (0 to 1). */
+  flight: { from: 0, to: 0, t: 1 },
+  /** The visitor's own look-around at a stop: turn and tilt about what the camera faces, radians. */
+  orbit: { yaw: 0, pitch: 0, zoom: 1 },
+  /** When the visitor last scrolled, dragged, swiped or pressed a key (performance.now()). */
+  lastInput: 0,
+  /** Fog thickness right now. Thinned when the camera climbs, so a long route stays visible. */
+  fogDensity: 0.000085,
+  /** How much of each leg of the route between venues is drawn, 0 to 1 (leg 0 joins Day 1 to Day 2). */
+  legs: [0, 0, 0, 0],
+  /** How visible each leg is, 0 to 1. Lines fade in and out with this; they only draw (grow) while the camera travels them. */
+  legShow: [0, 0, 0, 0],
+  /** The leg being travelled or just completed, or -1 on the wide shots. */
+  legActive: -1,
+  /** The road route of each leg, once worked out from the map; the camera follows it between days. */
+  routes: null as number[][] | null,
+  /** Seconds since the visitor said yes. Negative while the landing question is up. */
+  introT: -1,
+  /** True once the intro is over (or was skipped) and scrolling drives the camera. */
+  journey: false,
+  /** How far the light has spread along the streets from DE Exchange, in metres. */
+  reach: 0,
+  /** 0 → 1 as each day's beacon ignites during the intro. */
+  beacon: SITES.map(() => 0),
+  /** 0 → 1 as each venue comes into focus; drives its lights and beams. */
+  focus: SITES.map(() => 0),
+  /** 1 on the wide shots (overview and finale), 0 at a venue. */
+  wide: 1,
+  /** Map pins the scene positions every frame; the page registers the elements. */
+  pins: [] as (HTMLElement | null)[],
+  /** The text block of each stop; the scene fades them in step with the flights. */
+  cards: [] as (HTMLElement | null)[],
+  reduced: false,
+  quality: "high" as Quality,
+};
+
+/** Length of the intro, in seconds. */
+export const INTRO_SECONDS = 10.5;
+/** The light has covered the whole map, Ikot Abasi included, by this distance. */
+export const FULL_REACH = 11000;
+
+/** ?q=low|medium|high pins the quality level, for testing or for a visitor who wants to choose. */
+export function pinnedQuality(): Quality | null {
+  const q = new URLSearchParams(location.search).get("q");
+  return q === "low" || q === "medium" || q === "high" ? q : null;
+}
+
+export function startingQuality(): Quality {
+  const pinned = pinnedQuality();
+  if (pinned) return pinned;
+  const mem = (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 8;
+  const coarse = matchMedia("(pointer: coarse)").matches;
+  if (mem <= 3) return "low";
+  // Four cores or fewer usually means built-in graphics; phones also start in the middle.
+  return coarse || navigator.hardwareConcurrency <= 4 ? "medium" : "high";
+}

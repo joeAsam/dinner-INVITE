@@ -8,11 +8,13 @@
  *     { ... }, block including its trailing comma, paste it below, and edit it.
  *   - To remove an item, delete its whole { ... }, block.
  *   - If your text contains a double quote, write it as \" (for example "the \"best\" host").
- *   - `href` is where a link goes: "#pricing" jumps to a section of this page,
+ *   - `href` is where a link goes: "#features" jumps to a section of this page,
  *     "/" is the site's home page, "https://..." is another website.
  *
  * The sections below are in the same order as the page, top to bottom.
  */
+
+import { event } from "@/lib/content";
 
 export const content = {
   /* Browser tab title and the description search engines show. */
@@ -21,26 +23,24 @@ export const content = {
     description: "The simple view: no WebGL, one scrolling page.",
   },
 
-  /* Logo text (two stacked lines) and labels read aloud by screen readers. */
+  /* Logo text beside the flame (the year shows in amber), and labels read aloud by screen readers. */
   brand: {
-    logoLine1: "PXXL",
-    logoLine2: "APP",
-    logoLabel: "Pxxl App, back to top",
+    logoName: event.name,
+    logoYear: String(event.year),
+    logoLabel: `${event.name} ${event.year}, back to top`,
     skipLink: "Skip to content",
   },
 
   /* ---------- Top navigation ---------- */
   nav: {
+    /* One link per day of the week (Day 1 ... Day n), made from the days in lib/content.ts.
+       Each opens the 3D experience at that day. */
     links: [
-      { label: "Products", href: "#features" },
-      { label: "Developers", href: "#agent" },
-      { label: "Pricing", href: "#pricing" },
-      { label: "Buy a domain", href: "#top" },
-      { label: "What's new", href: "#top" },
-      { label: "More", href: "#faq" },
+      ...event.days.map((d) => ({ label: `Day ${d.day}`, href: `/?at=day${d.day}` })),
       { label: "3D Experience", href: "/" },
     ],
-    button: { label: "Dashboard", href: "#pricing" },
+    /* Opens the RSVP stop at the end of the 3D experience. */
+    button: { label: "RSVP", href: "/?at=rsvp" },
     openMenuLabel: "Open navigation menu",
     closeMenuLabel: "Close navigation menu",
   },
@@ -52,8 +52,8 @@ export const content = {
     rotatingWords: ["websites", "backend", "frontend", "projects"],
     titleEnd: "live, globally.",
     lead: "Pxxl builds and runs your apps, databases and domains from your repo, close to your users.",
-    primaryButton: { label: "Get started", href: "#pricing" },
-    secondaryButton: { label: "Get a domain", href: "#pricing" },
+    primaryButton: { label: "Get started", href: "#features" },
+    secondaryButton: { label: "Get a domain", href: "#datacenters" },
     /* The word after the city name on the map tag, e.g. "Lagos, NG - Datacenter". */
     mapTagLabel: "Datacenter",
     logosLabel: "Trusted by teams at",
@@ -138,7 +138,7 @@ export const content = {
   agent: {
     heading: "There's an agent for this.",
     headingDim: "Ask it to debug a build.", // the greyed second half of the heading
-    button: { label: "Try the agent", href: "#pricing" },
+    button: { label: "Try the agent", href: "#faq" },
     /* One-sentence description of the picture, for screen readers. */
     description: "The simple view: no WebGL, one scrolling page.",
     userMessage: "Why did my last deployment fail?",
@@ -165,90 +165,6 @@ export const content = {
       { text: "npm ERR! code ELIFECYCLE", error: true },
       { text: "Build failed with exit code 2", error: true },
     ],
-  },
-
-  /* ---------- Pricing ---------- */
-  pricing: {
-    heading: "Start free.",
-    headingHighlight: "Pay when you grow.", // shown in the pink chip
-    sub: "No card needed to start.",
-    popularBadge: "Most popular",
-    /*
-     * popular: true gives the plan the badge and the pink button.
-     * per is the small text after the price; leave it as "" for none.
-     * Each feature starts with an icon name. The choices are:
-     * "projects", "database", "domain", "memory", "bandwidth", "analytics".
-     */
-    plans: [
-      {
-        name: "Free",
-        audience: "for side projects",
-        price: "Free",
-        per: "",
-        note: "No card needed",
-        popular: false,
-        button: { label: "Start for free", href: "#top" },
-        features: [
-          ["projects", "5 total project slots"],
-          ["domain", "1 custom domain"],
-          ["memory", "0.5GB RAM per project"],
-          ["bandwidth", "50 GiB outbound bandwidth/month"],
-        ],
-      },
-      {
-        name: "Plus",
-        audience: "for growing projects",
-        price: "₦6,999",
-        per: "/mo",
-        note: "~ $5.00/mo · Billed monthly",
-        popular: false,
-        button: { label: "Get Plus", href: "#top" },
-        features: [
-          ["projects", "100 total project slots"],
-          ["database", "5 databases"],
-          ["domain", "Unlimited custom domains"],
-          ["memory", "1.5GB RAM per project"],
-          ["bandwidth", "200 GiB outbound bandwidth/month"],
-          ["analytics", "Web analytics and monitoring"],
-        ],
-      },
-      {
-        name: "Pro",
-        audience: "for apps in production",
-        price: "₦14,999",
-        per: "/mo",
-        note: "~ $13.99/mo · Billed monthly",
-        popular: true,
-        button: { label: "Get Pro", href: "#top" },
-        features: [
-          ["projects", "500 total project slots"],
-          ["database", "20 databases"],
-          ["domain", "Unlimited custom domains"],
-          ["memory", "2GB RAM per project"],
-          ["bandwidth", "500 GiB outbound bandwidth/month"],
-          ["analytics", "Web analytics and monitoring"],
-        ],
-      },
-      {
-        name: "Enterprise",
-        audience: "for teams at scale",
-        price: "Custom",
-        per: "",
-        note: "Priced for your team · Agreed on a call",
-        popular: false,
-        button: { label: "Get a quote", href: "#top" },
-        features: [
-          ["projects", "Unlimited total project slots"],
-          ["database", "100 databases"],
-          ["domain", "Unlimited custom domains"],
-          ["memory", "4GB RAM per project"],
-          ["bandwidth", "999 GiB outbound bandwidth/month"],
-          ["analytics", "Web analytics and monitoring"],
-        ],
-      },
-    ],
-    footnote: "Limits, build minutes, team seats and everything else, plan by plan.",
-    footnoteLink: { label: "Compare every feature", href: "#faq" },
   },
 
   /* ---------- Datacenters (the strips that open as you scroll) ---------- */
@@ -324,7 +240,6 @@ export const content = {
         title: "Links",
         links: [
           { label: "Domains", href: "#top" },
-          { label: "Pricing", href: "#top" },
           { label: "Guides", href: "#top" },
           { label: "Changelog", href: "#top" },
           { label: "Status Page", href: "#top" },
@@ -347,6 +262,6 @@ export const content = {
         ],
       },
     ],
-    bigWord: "pxxl.app", // the huge word at the very bottom
+    bigWord: "youth.week", // the huge word at the very bottom
   },
 };

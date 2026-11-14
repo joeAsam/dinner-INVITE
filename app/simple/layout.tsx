@@ -1,10 +1,13 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, JetBrains_Mono } from "next/font/google";
 import { content } from "./content";
 import "./pxxl.css";
 
 const geist = Geist({ subsets: ["latin"], weight: ["600"], variable: "--font-geist" });
 const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400"], variable: "--font-mono" });
+
+// Black browser chrome on phones, matching the page.
+export const viewport: Viewport = { themeColor: "#000000", colorScheme: "dark" };
 
 export const metadata: Metadata = {
   title: content.site.title,

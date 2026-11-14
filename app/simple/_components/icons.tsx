@@ -1,18 +1,15 @@
 import type { ReactNode } from "react";
+import { Logo as Mark } from "@/components/Logo";
 import { content } from "../content";
 
-/** Stand-in wordmark. The original Pxxl mark is not reproduced. */
+/** Youth Choir Week logo: the flame mark and wordmark from the 3D experience. */
 export function Logo() {
   return (
     <span className="logo">
-      <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
-        <circle cx="16" cy="15" r="8" fill="currentColor" />
-        <ellipse cx="16" cy="16" rx="15" ry="5" fill="none" stroke="currentColor" strokeWidth="2.2" transform="rotate(-18 16 16)" />
-      </svg>
+      {/* The same flame mark and wordmark as the navbar of the 3D experience. */}
+      <Mark size={24} />
       <span className="logo__text">
-        {content.brand.logoLine1}
-        <br />
-        {content.brand.logoLine2}
+        {content.brand.logoName} <em>{content.brand.logoYear}</em>
       </span>
     </span>
   );
