@@ -30,7 +30,7 @@ export const event = {
   question: "Are you ready for Youth Choir Week 2026?",
   fireFrom: "Youth Choir Week",
   lead: "We have just one question for you",
-  rsvpUrl: "#rsvp",
+  rsvpUrl: "/rsvp", // RSVP page → personal ticket by email (see app/rsvp, app/ticket, lib/rsvp)
   days: [
     {
       day: 1,
