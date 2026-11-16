@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { HomeLink } from "@/components/HomeLink";
 import { Logo } from "@/components/Logo";
 import { RsvpForm } from "@/components/rsvp/RsvpForm";
 import { dayLabel, event, time12, weekRange } from "@/lib/content";
@@ -12,12 +12,12 @@ export default function RsvpPage() {
     <main className="tk">
       <div className="tk-wrap tk-split">
         <section className="tk-intro">
-          <Link href="/" className="tk-brand">
+          <HomeLink className="tk-brand">
             <Logo size={26} />
             <span>
               YOUTH CHOIR WEEK <em>’{String(event.year).slice(-2)}</em>
             </span>
-          </Link>
+          </HomeLink>
           <p className="tk-kicker">
             {weekRange()} · {event.city}, {event.state}
           </p>

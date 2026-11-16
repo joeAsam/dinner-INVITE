@@ -2,6 +2,7 @@
 
 import Lenis from "lenis";
 import { useEffect } from "react";
+import { rememberHome } from "@/components/HomeLink";
 
 /** What fades up into place as it scrolls into view. Selectors that match nothing are skipped. */
 const REVEAL = [
@@ -25,6 +26,8 @@ const REVEAL = [
  */
 export function Motion() {
   useEffect(() => {
+    // The RSVP and ticket pages send the visitor back here, not to the 3D site.
+    rememberHome("/simple");
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const lenis = new Lenis({ autoRaf: true, anchors: true, lerp: 0.09 });

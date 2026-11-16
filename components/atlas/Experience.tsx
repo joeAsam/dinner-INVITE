@@ -6,6 +6,7 @@ import { dayLabel, dayLong, event, time12, weekRange, weekState } from "@/lib/co
 import { DAY_COLORS, LAST_STOP } from "@/lib/atlas/journey";
 import { VENUES } from "@/lib/venues";
 import { INTRO_SECONDS, world } from "@/lib/atlas/world";
+import { rememberHome } from "../HomeLink";
 import { Logo } from "../Logo";
 
 // Memoised: the scene only depends on a stable callback, so page state changes never touch it.
@@ -158,6 +159,7 @@ export function Experience() {
 
   // First load: skip the intro for reduced motion, the ?at= / ?skip shortcuts, and any visit from inside the site.
   useEffect(() => {
+    rememberHome("/");
     world.reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const params = new URLSearchParams(location.search);
     const asked = (params.get("at") ?? "").replace("-", "");

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { HomeLink } from "@/components/HomeLink";
 import { Logo } from "@/components/Logo";
 import { CancelRsvp } from "@/components/rsvp/CancelRsvp";
 import { dayLabel, event, time12, weekRange } from "@/lib/content";
@@ -30,15 +31,13 @@ export default async function TicketPage({ params, searchParams }: Props) {
     <main className="tk">
       <div className="tk-wrap">
         <header className="tk-top">
-          <Link href="/" className="tk-brand">
+          <HomeLink className="tk-brand">
             <Logo size={26} />
             <span>
               YOUTH CHOIR WEEK <em>{yy}</em>
             </span>
-          </Link>
-          <Link href="/" className="tk-link">
-            Back to the invite
-          </Link>
+          </HomeLink>
+          <HomeLink className="tk-link">Back to the invite</HomeLink>
         </header>
 
         {!cancelled && welcome && (
