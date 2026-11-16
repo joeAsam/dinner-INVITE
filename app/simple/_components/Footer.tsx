@@ -32,20 +32,6 @@ export function Footer() {
           <p className="foot__copy">{footer.copyright}</p>
         </div>
 
-        <div className="foot__cols">
-          {footer.columns.map((col) => (
-            <nav key={col.title} aria-label={col.title}>
-              <p className="foot__title">{col.title}</p>
-              <ul>
-                {col.links.map((l) => (
-                  <li key={l.label}>
-                    <a href={l.href}>{l.label}</a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          ))}
-        </div>
       </div>
 
       <p className="foot__word" aria-hidden="true">
