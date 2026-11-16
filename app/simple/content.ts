@@ -14,7 +14,11 @@
  * The sections below are in the same order as the page, top to bottom.
  */
 
-import { event } from "@/lib/content";
+import { dayLong, event, time12 } from "@/lib/content";
+import { VENUES } from "@/lib/venues";
+
+const first = event.days[0];
+const last = event.days[event.days.length - 1];
 
 export const content = {
   /* Browser tab title and the description search engines show. */
@@ -34,12 +38,12 @@ export const content = {
   /* ---------- Top navigation ---------- */
   nav: {
     /* One link per day of the week (Day 1 ... Day n), made from the days in lib/content.ts.
-       Each opens the 3D experience at that day. */
+       Each jumps to that day's card further down this page. */
     links: [
-      ...event.days.map((d) => ({ label: `Day ${d.day}`, href: `/?at=day${d.day}` })),
+      ...event.days.map((d) => ({ label: `Day ${d.day}`, href: `#day${d.day}` })),
       { label: "3D Experience", href: "/" },
     ],
-    /* Opens the RSVP page (name, email, ticket). */
+    /* Opens the RSVP page, where guests get their ticket. */
     button: { label: "RSVP", href: event.rsvpUrl },
     openMenuLabel: "Open navigation menu",
     closeMenuLabel: "Close navigation menu",
@@ -48,154 +52,89 @@ export const content = {
   /* ---------- Hero (the first screen) ---------- */
   hero: {
     /* The headline is three lines: titleStart, one of rotatingWords, titleEnd. */
-    titleStart: "Ship your",
-    rotatingWords: ["websites", "backend", "frontend", "projects"],
-    titleEnd: "live, globally.",
-    lead: "Pxxl builds and runs your apps, databases and domains from your repo, close to your users.",
-    primaryButton: { label: "Get started", href: "#features" },
-    secondaryButton: { label: "Get a domain", href: "#datacenters" },
-    /* The word after the city name on the map tag, e.g. "Lagos, NG - Datacenter". */
-    mapTagLabel: "Datacenter",
-    logosLabel: "Trusted by teams at",
+    titleStart: "Beyond the",
+    rotatingWords: ["music", "outings", "conversations"],
+    titleEnd: "Into the memories.",
+    lead: "Five days of friendship, fun and unforgettable memories. From the conference to the grand finale, we're bringing the family together for an experience beyond the music.",
+    primaryButton: { label: "RSVP", href: event.rsvpUrl },
+    secondaryButton: { label: "See Events", href: "#features" },
+    logosLabel: "THE WEEK WE'VE BEEN WAITING FOR.",
     /* style is the lettering used for the name: "serif", "heavy", "bold" or "wide". */
     logos: [
-      { name: "dayroom", style: "serif" },
-      { name: "OUNJEFOOD", style: "heavy" },
-      { name: "FlagSwift", style: "bold" },
-      { name: "CENCORI", style: "wide" },
+      { name: "fun", style: "serif" },
+      { name: "ADVENTURE", style: "heavy" },
+      { name: "Bonding", style: "bold" },
+      { name: "CELEBRATION", style: "wide" },
     ],
   },
 
   /* ---------- Big sentence with counting numbers ---------- */
   stats: {
-    /* Each {name} is replaced by the matching number below, shown in a pink chip. */
+    /* Each {name} is replaced by the matching number below, shown in a chip that counts up. */
     sentence:
-      "{developers} developers have built {projects} projects, shipped {deployments} deployments and served {requests} requests to {people} people in {countries} countries through Pxxl.",
+      "Over {voices} voices have been part of our journey. Nearly {students} students have pursued their academic dreams, {freshers} this year have taken their first steps into tertiary education, and {careers}+ members have built careers across leading industries around the world. This is the Field Temple Youth Choir story.",
     numbers: {
-      developers: 8329,
-      projects: 9361,
-      deployments: 103413,
-      requests: 156843415,
-      people: 3091628,
-      countries: 223,
+      voices: 200,
+      students: 50,
+      freshers: 10,
+      careers: 10,
     },
   },
 
-  /* ---------- Features (tabs on the left, product window on the right) ---------- */
+  /* ---------- The five days (tabs on the left, one card per day on the right) ----------
+     Each day's title, date, times, venue, dress code and "what to expect" come from
+     lib/content.ts, the same list the 3D experience uses, so edit the days there.
+     The words below are the labels around them. */
   features: {
-    heading: "From repo to production, in one place.",
-    items: [
-      {
-        id: "deploy", // used in the page address (#deploy): lowercase, no spaces, unique
-        title: "Deploy From Your Repo",
-        desc: "Push to Git and get a live URL, no config needed",
-        step: "Step 1 of 4",
-        stepTitle: "Deployment source",
-        hint: "Pick the path that matches how your project is stored.",
-        options: [
-          { name: "GitHub", desc: "Import a repository and deploy future commits." },
-          { name: "GitLab", desc: "Connect GitLab and deploy from your projects." },
-          { name: "Pxxl Drop", desc: "Drag a local archive or static build from your device." },
-          { name: "WordPress", desc: "Launch a managed WordPress installation." },
-          { name: "Docker image", desc: "Run a prebuilt image from Docker Hub or a registry." },
-          { name: "Dockerfile", desc: "Build with your own container instructions." },
-        ],
-      },
-      {
-        id: "databases",
-        title: "Spin Up Databases",
-        desc: "MongoDB, PostgreSQL and MySQL in seconds",
-        step: "Step 1 of 2",
-        stepTitle: "Database Type",
-        hint: "Choose the database engine for this instance.",
-        options: [
-          { name: "PostgreSQL", desc: "Relational SQL database with advanced data types." },
-          { name: "MySQL", desc: "Reliable relational database for web applications." },
-          { name: "MongoDB", desc: "Document database for flexible application data." },
-          { name: "Redis", desc: "In-memory data store for caching and queues." },
-          { name: "MariaDB", desc: "Open-source MySQL-compatible relational database." },
-          { name: "ClickHouse", desc: "Columnar database for high-speed analytics." },
-        ],
-      },
-      {
-        id: "ai-tools",
-        title: "Connect Your AI Tools",
-        desc: "MCP for Claude, Cursor and Codex, plus an API",
-        step: "Step 1 of 3",
-        stepTitle: "MCP Client",
-        hint: "Choose where this connection will be used.",
-        options: [
-          { name: "Claude Desktop", desc: "Connect Anthropic's desktop client." },
-          { name: "Cursor", desc: "Use Pxxl tools inside Cursor." },
-          { name: "Codex", desc: "Connect an OpenAI Codex client." },
-          { name: "Other client", desc: "Configure any remote MCP client." },
-        ],
-      },
-    ],
+    heading: "Five days, four venues.",
+    whenLabel: "When",
+    whereLabel: "Where",
+    dressLabel: "Dress code",
+    expectLabel: "What to expect",
+    mapLabel: "Directions",
+    button: { label: "Get your ticket", href: event.rsvpUrl },
   },
 
-  /* ---------- Agent (chat window with build logs) ---------- */
-  agent: {
-    heading: "There's an agent for this.",
-    headingDim: "Ask it to debug a build.", // the greyed second half of the heading
-    button: { label: "Try the agent", href: "#faq" },
-    /* One-sentence description of the picture, for screen readers. */
-    description: "The simple view: no WebGL, one scrolling page.",
-    userMessage: "Why did my last deployment fail?",
-    /* Wrap a word in `backticks` to show it as code. */
-    reply: "The build stopped on a type error. `users.ts` imports a name that was renamed in the last commit.",
-    tableHeaders: ["Field", "Value"],
-    tableRows: [
-      ["Project", "investor-api"],
-      ["Status", "Failed"],
-      ["Commit", "a41c9e2 · Rename user types"],
-      ["Build time", "1m 7s"],
-    ],
-    followUp: "I can fix the import and redeploy.",
-    logsTitle: "Build logs",
-    logsSummary: "8 lines · 4 with errors",
-    /* error: true shows the line in red. */
-    logLines: [
-      { text: "#5 [4/6] RUN npm ci", error: false },
-      { text: "added 412 packages in 18s", error: false },
-      { text: "#7 [6/6] RUN npm run build", error: false },
-      { text: "> tsc -p .", error: false },
-      { text: "src/routes/users.ts(42,17): error TS2304: Cannot find name 'UserRecord'.", error: true },
-      { text: "src/routes/users.ts(58,9): error TS2304: Cannot find name 'UserRecord'.", error: true },
-      { text: "npm ERR! code ELIFECYCLE", error: true },
-      { text: "Build failed with exit code 2", error: true },
-    ],
-  },
-
-  /* ---------- Datacenters (the strips that open as you scroll) ---------- */
-  datacenters: {
-    heading: "Our Datacenter Locations",
-    /* The site has five background scenes; a sixth location reuses the first one. */
-    locations: [
+  /* ---------- Pictures (the strips that open as you scroll) ----------
+     Photos live in public/simple/gallery/. To swap one, replace the file (keep the name)
+     or point `src` at a new file in that folder. `alt` describes the photo for screen readers. */
+  gallery: {
+    heading: "Moments from our journey",
+    photos: [
       {
-        region: "West Africa",
-        city: "Lagos, Nigeria",
-        desc: "Our home. Apps for Lagos, Abuja, Accra and the rest of West Africa run a short hop from the people using them.",
+        src: "/simple/gallery/full-choir.jpg",
+        alt: "The Field Temple Youth Choir in white shirts, red ties and navy, on the church steps",
+        tag: "The choir",
+        title: "One choir",
+        desc: "The Field Temple Youth Choir in our uniforms, together.",
       },
       {
-        region: "EU-Central",
-        city: "Nuremberg, Germany",
-        desc: "The default for new projects, with strong links across Europe, Africa and the Middle East.",
+        src: "/simple/gallery/session.jpg",
+        alt: "Choir members seated around a table, listening during a session",
+        tag: "Sessions",
+        title: "Learning together",
+        desc: "Leadership sessions where we sharpen how we lead, serve our sections and grow.",
       },
       {
-        region: "EU-West",
-        city: "Paris, France",
-        desc: "A short trip for users in France, the UK, Spain and North Africa.",
+        src: "/simple/gallery/workshop.jpg",
+        alt: "Choir members building a model from sticks and paper at a table",
+        tag: "Workshops",
+        title: "Hands on",
+        desc: "Team challenges that turn a room of voices into one working team.",
       },
       {
-        region: "EU-North",
-        city: "Helsinki and Copenhagen",
-        desc: "Covers the Nordics and the Baltics from two cities at once.",
+        src: "/simple/gallery/awards.jpg",
+        alt: "A choir executive receiving a Most Active Executive of the Year certificate",
+        tag: "Awards",
+        title: "Celebrating our own",
+        desc: "Awards presentation, where we honour the people who carry the choir all year.",
       },
       {
-        region: "US-East",
-        city: "New York, United States",
-        desc: "Close to users across North America, and a quick hop to South America and Western Europe.",
+        src: "/simple/gallery/together.jpg",
+        alt: "Smiling choir members in uniform posing in front of the church building",
+        tag: "Family",
+        title: "More than a choir",
+        desc: "Friendships, mentors and a family that keeps singing long after the last note.",
       },
     ],
   },
@@ -203,65 +142,36 @@ export const content = {
   /* ---------- Questions and answers ---------- */
   faq: {
     heading: "Frequently asked questions", // read by screen readers, not shown
+    /* Choir week questions first, then general ones about the choir. */
     items: [
       {
-        q: "What is Pxxl and how does it work?",
-        a: "Pxxl is a powerful cloud deployment platform that allows developers to deploy web applications instantly with zero configuration. Simply connect your Git repository, and Pxxl automatically configures your project environment, builds your application, and deploys it globally across our high-performance CDN network.",
+        q: "When does the week commence?",
+        a: `Youth Choir Week starts on ${dayLong(first.date)} at ${time12(first.start)} with the ${first.title} at ${VENUES[first.venue].name}, and runs until the ${last.title} on ${dayLong(last.date)}. The days above have the times and venues for each day.`,
       },
       {
-        q: "Which languages and frameworks are supported?",
-        a: "Pxxl supports over 20 programming languages and frameworks including React, Next.js, Vue.js, Angular, Node.js, Python, PHP, HTML/CSS, and many more. Our platform automatically detects your project type and configures the optimal environment.",
+        q: "Is the Dinner and Awards Night open to guests?",
+        // ⚠ Placeholder answer: confirm with the organisers before going live.
+        a: "Yes. Family and friends are welcome to join us for the Dinner and Awards Night. Each guest should RSVP with their own name and email so we can plan seats and food, and the dress code is formal.",
       },
       {
-        q: "Does Pxxl provide database services?",
-        a: "Yes! Pxxl offers comprehensive database management for MongoDB, PostgreSQL, and MySQL. You can create and manage databases in seconds with seamless integration into your application workflow, all through our intuitive dashboard.",
+        q: "How do I register or confirm my participation?",
+        a: "Tap RSVP and enter your name and email. You'll get a personal ticket with a QR code by email. One ticket covers all five days. Show it at the door each day, and we'll email you a reminder 2 hours before each day starts.",
       },
       {
-        q: "Can I collaborate with my team?",
-        a: "Absolutely! Pxxl supports team collaboration features where you can create teams, share projects and databases across team members, and manage permissions. This enables efficient collaboration and streamlined development workflows.",
+        q: "Who can be part of the choir?",
+        // ⚠ Placeholder answer: confirm with the choir leadership before going live.
+        a: "Any young person in Field Temple who loves to sing and serve is welcome. Speak to any choir executive after service, or come along to a rehearsal to get started.",
       },
     ],
   },
 
   /* ---------- Footer ---------- */
   footer: {
-    tagline: "Develop with your favorite tools. Launch globally, instantly.",
-    copyright: "© Pxxl App  •  MMXXIV — MMXXVI",
-    /* Icons exist for "Facebook", "Instagram", "TikTok" and "X". */
-    socialLabelPrefix: "Pxxl on", // read aloud as "Pxxl on Facebook"
-    socials: [
-      { name: "Facebook", href: "#top" },
-      { name: "Instagram", href: "#top" },
-      { name: "TikTok", href: "#top" },
-      { name: "X", href: "#top" },
-    ],
-    columns: [
-      {
-        title: "Links",
-        links: [
-          { label: "Domains", href: "#top" },
-          { label: "Guides", href: "#top" },
-          { label: "Changelog", href: "#top" },
-          { label: "Status Page", href: "#top" },
-          { label: "DNS Lookup", href: "#top" },
-        ],
-      },
-      {
-        title: "Support",
-        links: [
-          { label: "About Us", href: "#top" },
-          { label: "Contact Us", href: "#top" },
-          { label: "Donate", href: "#top" },
-        ],
-      },
-      {
-        title: "Legal",
-        links: [
-          { label: "Terms & Conditions", href: "#top" },
-          { label: "Privacy Policy", href: "#top" },
-        ],
-      },
-    ],
+    tagline: `${event.theme}.`,
+    copyright: "© TAC Field Temple Youth Choir  •  MMXXVI",
+    /* Icons exist for "Facebook", "Instagram", "TikTok" and "X". Add a line to list another. */
+    socialLabelPrefix: "Field Temple Youth Choir on", // read aloud as "Field Temple Youth Choir on Facebook"
+    socials: [{ name: "Facebook", href: "https://web.facebook.com/profile.php?id=61550265632037" }],
     bigWord: "youth.week", // the huge word at the very bottom
   },
 };

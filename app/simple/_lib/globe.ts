@@ -2,14 +2,22 @@
 // land dots sampled on a Mercator grid, thinned toward the poles, and drawn through a
 // projection that blends an orthographic globe (flat = 0) into a flat map (flat = 1).
 
+import { DAY_COLORS } from "@/lib/atlas/journey";
+import { event } from "@/lib/content";
+
 export type LatLng = { lat: number; lng: number };
 export type Vec = [number, number, number];
-export type Place = LatLng & { name: string; countryCode: string; home?: boolean; hub?: boolean };
+export type Place = LatLng & { name: string; countryCode: string; home?: boolean; hub?: boolean; color?: string };
+/** A stop on the hero map's tour, labelled with one day of the week. */
+export type Stop = Place & { day: number; title: string; color: string };
 
-const HUBS = ["Lagos", "Nuremberg", "Johannesburg", "Singapore", "New York"];
+// The map glides between these five spots, one per day of the week (Day 1 at the first, and so on).
+// Eket is home. To move a stop, change the name here to another city in PLACES.
+const HUBS = ["Eket", "Nuremberg", "Johannesburg", "Singapore", "New York"];
 
 export const PLACES: Place[] = [
-  { name: "Lagos", countryCode: "ng", lat: 6.52, lng: 3.38, home: true },
+  { name: "Eket", countryCode: "ng", lat: 4.64, lng: 7.93, home: true },
+  { name: "Lagos", countryCode: "ng", lat: 6.52, lng: 3.38 },
   { name: "Nairobi", countryCode: "ke", lat: -1.29, lng: 36.82 },
   { name: "Johannesburg", countryCode: "za", lat: -26.2, lng: 28.04 },
   { name: "Cairo", countryCode: "eg", lat: 30.04, lng: 31.24 },
@@ -36,10 +44,16 @@ export const PLACES: Place[] = [
   { name: "Auckland", countryCode: "nz", lat: -36.85, lng: 174.76 },
   { name: "Dakar", countryCode: "sn", lat: 14.72, lng: -17.47 },
   { name: "Addis Ababa", countryCode: "et", lat: 9.03, lng: 38.74 },
-].map((p) => (HUBS.includes(p.name) ? { ...p, hub: true } : p));
+].map((p) => {
+  const i = HUBS.indexOf(p.name);
+  return i >= 0 ? { ...p, hub: true, color: DAY_COLORS[i % DAY_COLORS.length] } : p;
+});
 
-/** The datacenters the map pans between, in order. */
-export const TOUR: Place[] = HUBS.map((name) => PLACES.find((p) => p.name === name)!);
+/** The map's tour: Day 1 to Day 5 (titles from lib/content.ts), each at one of the HUBS above. */
+export const TOUR: Stop[] = HUBS.map((name, i) => {
+  const d = event.days[i % event.days.length];
+  return { ...PLACES.find((p) => p.name === name)!, day: d.day, title: d.title, color: DAY_COLORS[(d.day - 1) % DAY_COLORS.length] };
+});
 
 // ---------- Projection ----------
 
