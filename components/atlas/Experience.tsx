@@ -456,6 +456,10 @@ export function Experience() {
           </ul>
 
           <div className="bar__end">
+            {/* Phones and tablets: the simple view on the visible bar, not only inside the menu. */}
+            <Link className="bar__simple" href="/simple" scroll={false}>
+              Simple view
+            </Link>
             <MusicButton />
             {rsvpReady ? (
               <a className="bar__cta" href={event.rsvpUrl}>

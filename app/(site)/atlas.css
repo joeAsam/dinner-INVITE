@@ -404,9 +404,12 @@ body:has(.xp) {
 
 /* ---------- Stops ---------- */
 
+/* Above the map pins (12) so the overview text and day cards are never covered, but below the navbar (20)
+   and the intro (25, 30). The layer itself lets clicks through; the scene turns them on for each card as it shows. */
 :where(.xp) .stops {
   position: relative;
-  z-index: 10;
+  z-index: 15;
+  pointer-events: none;
   opacity: 0;
   transition: opacity 1.2s ease;
 }
@@ -1419,6 +1422,33 @@ html:has(.xp) {
   box-shadow: 0 12px 34px -10px var(--brand-glow);
 }
 
+/* "Simple view" stays on the visible bar below 1024px (on desktop it is one of the centre links),
+   so visitors on slower phones see the lighter version straight away. */
+:where(.xp) .bar__simple {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
+}
+
+:where(.xp) .bar__simple:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.12);
+}
+
 :where(.xp) .bar__toggle {
   display: grid;
   place-items: center;
@@ -1508,7 +1538,36 @@ html:has(.xp) {
   }
 
   :where(.xp) .bar__toggle,
-  :where(.xp) .bar__menu {
+  :where(.xp) .bar__menu,
+  :where(.xp) .bar__simple {
+    display: none;
+  }
+}
+
+/* Narrow phones: the bar keeps logo, "Simple view", music and menu on one row. */
+@media (max-width: 400px) {
+  :where(.xp) .bar__inner {
+    gap: 8px;
+  }
+
+  :where(.xp) .bar__logo {
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  :where(.xp) .bar__end {
+    gap: 6px;
+  }
+
+  :where(.xp) .bar__simple {
+    padding: 0 10px;
+    font-size: 12px;
+  }
+}
+
+/* Very small phones (320px): the flame alone; its label still names the event for screen readers. */
+@media (max-width: 340px) {
+  :where(.xp) .bar__logo span {
     display: none;
   }
 }
