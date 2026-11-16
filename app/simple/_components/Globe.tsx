@@ -7,7 +7,7 @@ import { PLACES, TOUR, buildArcs, project, toVec, tourAt, type Vec, type View } 
 const DOT = "#b5b5b5";
 const SPHERE = "#0a0a0a";
 const HOME = "#fbf6ee";
-const BRAND = "#FFB347";
+const BRAND = "#F26F21";
 const QUIET = "#8f8f8f";
 const FLAT_ZOOM = 1.25;
 const TILT = 14;
@@ -60,7 +60,7 @@ function drawArcs(arcs: ReturnType<typeof buildArcs>, f: Frame) {
       if (f.flat > 0.5 && Math.abs(a.x - b.x) > f.size * 0.3) continue;
       const along = (i / last - tail) / Math.max(0.001, head - tail);
       ctx.globalAlpha = arc.steady ? 0.35 : 1;
-      ctx.strokeStyle = arc.steady ? HOME : `rgba(255,179,71,${(0.15 + along * 0.75).toFixed(3)})`;
+      ctx.strokeStyle = arc.steady ? HOME : `rgba(255,138,61,${(0.15 + along * 0.75).toFixed(3)})`;
       ctx.beginPath();
       ctx.moveTo(a.x, a.y);
       ctx.lineTo(b.x, b.y);

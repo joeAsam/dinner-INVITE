@@ -14,15 +14,16 @@
   --lp-grid: rgba(251, 246, 238, 0.09);
   --lp-line-strong: rgba(251, 246, 238, 0.16);
 
-  /* Amber, as in the "'26" of the wordmark. The day colours appear as secondary accents. */
-  --brand: #ffb347;
-  --brand-text: #ffc06a;
-  --brand-soft: rgba(255, 179, 71, 0.12);
-  --brand-soft-2: rgba(255, 179, 71, 0.14);
-  --btn-primary: #ffb347;
-  --btn-primary-hover: #ffc266;
-  --btn-primary-ring: rgba(255, 207, 134, 0.55);
-  --btn-primary-ink: #1c1203;
+  /* Ember: the orange of the flame logo and the "Get my ticket" button. The day colours appear as secondary accents. */
+  --brand: #f26f21;
+  --brand-text: #ff8a3d;
+  --brand-gradient: linear-gradient(135deg, #ff8a3d, #f26f21 55%, #d9481a);
+  --brand-glow: rgba(242, 111, 33, 0.8);
+  --brand-soft: rgba(242, 111, 33, 0.14);
+  --brand-soft-2: rgba(242, 111, 33, 0.16);
+  --btn-primary: #f26f21;
+  --btn-primary-ring: rgba(255, 138, 61, 0.45);
+  --btn-primary-ink: #ffffff;
   --btn-surface: rgba(251, 246, 238, 0.04);
   --btn-surface-hover: rgba(251, 246, 238, 0.09);
   --btn-border: rgba(251, 246, 238, 0.14);
@@ -240,17 +241,17 @@ body:has(.pxxl) {
   padding: 0 20px;
   border-radius: 8px;
   background-color: var(--btn-primary);
-  background-image: linear-gradient(rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 60%);
+  background-image: var(--brand-gradient);
   box-shadow:
     0 0 0 1px var(--btn-primary-ring),
-    0 6px 24px -8px rgba(255, 179, 71, 0.55);
+    0 10px 40px -10px var(--brand-glow);
   color: var(--btn-primary-ink);
   font-family: var(--font-nav);
   font-weight: 600;
 }
 
 .btn--primary:hover {
-  background-color: var(--btn-primary-hover);
+  filter: brightness(1.08);
 }
 
 .btn--secondary {
@@ -382,17 +383,18 @@ body:has(.pxxl) {
   justify-self: end;
   padding: 6px 16px;
   border-radius: 6px;
-  background: var(--lp-ink);
-  color: var(--lp-bg);
+  background: var(--brand-gradient);
+  box-shadow: 0 8px 28px -10px var(--brand-glow);
+  color: #fff;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 20px;
   text-decoration: none;
-  transition: background-color 0.2s;
+  transition: filter 0.2s;
 }
 
 .nav__cta:hover {
-  background: rgba(251, 246, 238, 0.86);
+  filter: brightness(1.08);
 }
 
 .nav__toggle {
@@ -1036,7 +1038,7 @@ body:has(.pxxl) {
   max-width: 85%;
   padding: 10px 16px;
   border-radius: 16px;
-  background: rgba(255, 179, 71, 0.14);
+  background: var(--brand-soft-2);
 }
 
 .chat__text code {
@@ -1399,7 +1401,7 @@ details[open] .faq__mark {
 }
 
 .foot__socials a:hover {
-  background: rgba(255, 179, 71, 0.14);
+  background: var(--brand-soft-2);
 }
 
 .foot__copy {
@@ -1444,9 +1446,8 @@ details[open] .faq__mark {
   padding-bottom: 0.2em;
   margin-bottom: 24px;
   overflow: hidden;
-  /* The gradient ends in blue, not black, so the bottom of the letters stays visible. */
-  background:
-    linear-gradient(180deg, #ffd36b 0%, #ffb347 35%, #ff6fb1 70%, #7aa7ff 100%);
+  /* The brand ember gradient. */
+  background: var(--brand-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
