@@ -8,7 +8,7 @@ import { DAY_COLORS, LAST_STOP } from "@/lib/atlas/journey";
 import { VENUES } from "@/lib/venues";
 import { INTRO_SECONDS, world } from "@/lib/atlas/world";
 import { rememberHome } from "../HomeLink";
-import { MusicButton } from "../MusicButton";
+import { MusicButton, useMusic } from "../MusicButton";
 import { Logo } from "../Logo";
 
 // Memoised: the scene only depends on a stable callback, so page state changes never touch it.
@@ -149,6 +149,7 @@ export function Experience() {
   const [open, setOpen] = useState<number | null>(null);
   const [grabbing, setGrabbing] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const music = useMusic();
   const at = useRef(0);
   const introDecided = useRef<boolean | null>(null);
 
@@ -650,27 +651,6 @@ export function Experience() {
         </section>
       </main>
 
-      {/* Step arrows: the same one-stop move as a scroll, for anyone who prefers to click. */}
-      <div className="steps">
-        <button type="button" aria-label="Previous stop" disabled={active === 0} onClick={() => goTo(active - 1)}>
-          ↑
-        </button>
-        <span className="label" aria-hidden="true">
-          {day2(active + 1)} / {day2(LAST_STOP + 1)}
-        </span>
-        <button type="button" aria-label="Next stop" disabled={active === LAST_STOP} onClick={() => goTo(active + 1)}>
-          ↓
-        </button>
-      </div>
-
-      {/* How to move, shown only on the overview. */}
-      <p className="hero__hint label" aria-hidden={active !== 0}>
-        <span className="hero__hint-drag">Drag to look around · Ctrl + scroll or pinch to zoom</span>
-        <button type="button" tabIndex={active === 0 ? 0 : -1} onClick={() => goTo(1)}>
-          Scroll for Day 1 <span aria-hidden="true">↓</span>
-        </button>
-      </p>
-
       <p className="credit">Map data © OpenStreetMap contributors</p>
 
       {phase === "intro" && <IntroCaptions onTitle={showTitle} onDone={startJourney} onSkip={skip} />}
@@ -686,7 +666,16 @@ export function Experience() {
               </span>
             ))}
           </h1>
-          <button type="button" className="btn btn--light btn--big" disabled={!ready} onClick={() => setPhase("intro")}>
+          <button
+            type="button"
+            className="btn btn--light btn--big"
+            disabled={!ready}
+            onClick={() => {
+              // The music starts with the intro, at every screen size (called inside the click, so phones allow it).
+              music?.start();
+              setPhase("intro");
+            }}
+          >
             {ready ? "Yes, I’m ready" : "Loading the map…"}
           </button>
           <button type="button" className="landing__skip" onClick={skip}>

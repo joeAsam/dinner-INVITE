@@ -11,7 +11,7 @@
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.8);
+  color: #ffffff;
   cursor: pointer;
   transition:
     border-color 0.25s,
@@ -21,8 +21,8 @@
 }
 
 .music:hover {
-  border-color: rgba(255, 138, 61, 0.55);
-  background: rgba(242, 111, 33, 0.12);
+  border-color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.12);
   transform: translateY(-1px);
 }
 
@@ -31,13 +31,12 @@
 }
 
 .music:focus-visible {
-  outline: 2px solid #ff8a3d;
+  outline: 2px solid #ffffff;
   outline-offset: 3px;
 }
 
 .music[data-playing="true"] {
-  border-color: rgba(255, 138, 61, 0.45);
-  box-shadow: 0 0 18px -6px rgba(242, 111, 33, 0.8);
+  border-color: rgba(255, 255, 255, 0.35);
 }
 
 .music > * {
@@ -59,7 +58,7 @@
   width: 3px;
   height: 100%;
   border-radius: 2px;
-  background: linear-gradient(180deg, #ff8a3d, #f26f21 55%, #d9481a);
+  background: #ffffff;
   transform-origin: 50% 100%;
   transform: scaleY(0.3);
 }

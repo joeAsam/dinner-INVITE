@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useRef, useState, type ReactNode 
 import { music } from "@/lib/music";
 import "./music.css";
 
-type Music = { playing: boolean; title: string; toggle: () => void };
+type Music = { playing: boolean; title: string; toggle: () => void; start: () => void };
 const MusicContext = createContext<Music | null>(null);
 
 /** Set after the first player in this page load, so only that one treats a refresh as a fresh start. */
@@ -38,7 +38,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   const [playing, setPlaying] = useState(false);
   const [missing, setMissing] = useState(false);
   const [title, setTitle] = useState(music.tracks[0]?.title ?? "");
-  const api = useRef<{ toggle: () => void } | null>(null);
+  const api = useRef<{ toggle: () => void; start: () => void } | null>(null);
 
   useEffect(() => {
     const tracks = music.tracks;
@@ -144,24 +144,38 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     load(index, resumeAt);
 
     // Start on the first interaction, unless the visitor muted the music before.
+    // Phones and tablets only allow sound from a finished tap (finger lifted: pointerup / touchend / click),
+    // not from the finger touching down, so listen for all of them, and keep listening until the music really starts.
     const muted = read(() => localStorage, PREF) === "off";
+    const GESTURES = ["pointerdown", "pointerup", "touchend", "click", "keydown"] as const;
     const firstGesture = (e: Event) => {
       // The mute button handles its own click.
       if (e.target instanceof Element && e.target.closest(".music")) return;
-      removeGesture();
-      if (audio.paused) play();
+      if (!audio.paused) {
+        removeGesture();
+        return;
+      }
+      wantPlay = true;
+      fadeIn();
+      audio.play().then(removeGesture, () => {
+        // Not a gesture this browser accepts (e.g. a finger touching down); the next one will be.
+      });
     };
     const removeGesture = () => {
-      window.removeEventListener("pointerdown", firstGesture, true);
-      window.removeEventListener("keydown", firstGesture, true);
+      for (const type of GESTURES) window.removeEventListener(type, firstGesture, true);
     };
     if (!muted) {
-      window.addEventListener("pointerdown", firstGesture, true);
-      window.addEventListener("keydown", firstGesture, true);
+      for (const type of GESTURES) window.addEventListener(type, firstGesture, true);
       play(); // Works straight away if the browser already allows sound for this site.
     }
 
     api.current = {
+      // Start right now, from inside a click (so phones allow the sound), e.g. the "Yes, I'm ready" button.
+      start: () => {
+        removeGesture();
+        write(() => localStorage, PREF, "on");
+        if (audio.paused) play();
+      },
       toggle: () => {
         removeGesture();
         if (audio.paused) {
@@ -190,9 +204,12 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const value = missing ? null : { playing, title, toggle: () => api.current?.toggle() };
+  const value = missing ? null : { playing, title, toggle: () => api.current?.toggle(), start: () => api.current?.start() };
   return <MusicContext.Provider value={value}>{children}</MusicContext.Provider>;
 }
+
+/** The music player, for starting it from a button (null outside the player or if the song can't be loaded). */
+export const useMusic = () => useContext(MusicContext);
 
 /** Mute / unmute button for the music. Renders nothing outside the player or if the song can't be loaded. */
 export function MusicButton({ className = "" }: { className?: string }) {
