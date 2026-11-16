@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { content } from "../content";
 
-// The numbers are a snapshot of the live counters on pxxl.app, read on 2026-11-09.
+// The numbers and sentence are in content.ts (stats).
 const NUMBERS: Record<string, number> = content.stats.numbers;
 // Odd entries are the {names} from the sentence, even entries the words between them.
 const PARTS = content.stats.sentence.split(/\{(\w+)\}/);

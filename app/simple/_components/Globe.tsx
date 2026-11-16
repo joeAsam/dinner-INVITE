@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { content } from "../content";
 import { PLACES, TOUR, buildArcs, project, toVec, tourAt, type Vec, type View } from "../_lib/globe";
 
 const DOT = "#b5b5b5";
@@ -15,7 +14,7 @@ const ARC_PERIOD = 3.2;
 const ARC_REVEAL = 0.9;
 const MAX_CANVAS = 2048;
 
-type Pin = { name: string; home?: boolean; hub?: boolean; v: Vec; flag: HTMLImageElement; grey?: HTMLCanvasElement };
+type Pin = { name: string; home?: boolean; hub?: boolean; color?: string; v: Vec };
 type Frame = View & { ctx: CanvasRenderingContext2D; dpr: number; time: number; still: boolean };
 
 function drawDots(dots: Vec[], f: Frame) {
@@ -70,27 +69,14 @@ function drawArcs(arcs: ReturnType<typeof buildArcs>, f: Frame) {
   ctx.globalAlpha = 1;
 }
 
-function greyFlag(pin: Pin): CanvasImageSource {
-  if (!pin.grey) {
-    const c = document.createElement("canvas");
-    c.width = pin.flag.naturalWidth;
-    c.height = pin.flag.naturalHeight;
-    const g = c.getContext("2d");
-    if (!g) return pin.flag;
-    g.filter = "grayscale(50%)";
-    g.drawImage(pin.flag, 0, 0);
-    pin.grey = c;
-  }
-  return pin.grey;
-}
-
 function drawPins(pins: Pin[], f: Frame) {
   const { ctx, dpr, time } = f;
   for (const pin of pins) {
     const p = project(pin.v, f);
     if (p.z <= 0.05) continue;
     const major = pin.hub || pin.home;
-    const color = major ? BRAND : QUIET;
+    // Day stops wear their day's colour; every other city is a quiet grey dot.
+    const color = pin.color ?? (major ? BRAND : QUIET);
 
     // Expanding pulse ring.
     const pulse = (time * 0.8 + pin.name.length * 0.13) % 1;
@@ -101,43 +87,24 @@ function drawPins(pins: Pin[], f: Frame) {
     ctx.arc(p.x, p.y, (pin.hub ? 8 + pulse * 18 : 3 + pulse * 11) * 0.7 * dpr, 0, Math.PI * 2);
     ctx.stroke();
 
+    // The dot itself.
     ctx.globalAlpha = 0.35 + p.z * 0.65;
-    const loaded = pin.flag.complete && pin.flag.naturalWidth > 0;
-    const radius = (major ? 6.5 : 5) * dpr;
-    if (loaded) {
-      const img = greyFlag(pin);
-      const w = pin.grey ? pin.grey.width : pin.flag.naturalWidth;
-      const h = pin.grey ? pin.grey.height : pin.flag.naturalHeight;
-      const scale = (radius * 2) / Math.min(w, h);
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
-      ctx.clip();
-      ctx.drawImage(img, p.x - (w * scale) / 2, p.y - (h * scale) / 2, w * scale, h * scale);
-      ctx.restore();
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 1.5 * dpr;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
-      ctx.stroke();
-    } else {
-      ctx.fillStyle = pin.home ? HOME : BRAND;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, (major ? 3.4 : 2.6) * dpr, 0, Math.PI * 2);
-      ctx.fill();
-    }
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, (major ? 4.2 : 2.6) * dpr, 0, Math.PI * 2);
+    ctx.fill();
     if (pin.hub) {
-      ctx.strokeStyle = BRAND;
+      ctx.strokeStyle = color;
       ctx.lineWidth = 2 * dpr;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, (loaded ? radius / dpr + 2.5 : 7) * dpr, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, 7.5 * dpr, 0, Math.PI * 2);
       ctx.stroke();
     }
   }
   ctx.globalAlpha = 1;
 }
 
-/** Hero map: a flat dotted world that pans from one datacenter to the next. */
+/** Hero map: a flat dotted world that pans between five spots, tagged Day 1 to Day 5. */
 export function Globe({ dots }: { dots: number[] }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const markerRef = useRef<HTMLDivElement>(null);
@@ -155,12 +122,7 @@ export function Globe({ dots }: { dots: number[] }) {
     if (!canvas || !ctx) return;
 
     const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const pins: Pin[] = PLACES.map((p) => {
-      const flag = new Image();
-      flag.decoding = "async";
-      flag.src = `https://flagcdn.com/w80/${p.countryCode}.webp`;
-      return { name: p.name, home: p.home, hub: p.hub, v: toVec(p), flag };
-    });
+    const pins: Pin[] = PLACES.map((p) => ({ name: p.name, home: p.home, hub: p.hub, color: p.color, v: toVec(p) }));
 
     let size = 0;
     let dpr = 1;
@@ -171,7 +133,7 @@ export function Globe({ dots }: { dots: number[] }) {
 
     const draw = (now: number) => {
       const time = (now - started) / 1000;
-      // With reduced motion the map stays a still globe centred on the first datacenter.
+      // With reduced motion the map stays a still globe centred on Day 1.
       const tour = still
         ? { index: 0, lng: -TOUR[0].lng, lat: TOUR[0].lat, arrived: true }
         : tourAt(time, TOUR);
@@ -235,13 +197,7 @@ export function Globe({ dots }: { dots: number[] }) {
     });
     io.observe(canvas);
     resize();
-    // Flags arrive after first paint; redraw the still frame once they do.
-    // The listeners are dropped on unmount so a late flag never draws onto a detached canvas.
-    const flagsLoaded = new AbortController();
-    if (still) pins.forEach((p) => p.flag.addEventListener("load", () => draw(performance.now()), { once: true, signal: flagsLoaded.signal }));
-
     return () => {
-      flagsLoaded.abort();
       cancelAnimationFrame(raf);
       ro.disconnect();
       io.disconnect();
@@ -255,12 +211,9 @@ export function Globe({ dots }: { dots: number[] }) {
       <canvas ref={canvasRef} className="globe__canvas" />
       <div ref={markerRef} className="globe__marker">
         <div className="globe__tag">
-          <span className="globe__flag">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={`https://flagcdn.com/w80/${place.countryCode}.webp`} alt="" />
-          </span>
+          <span className="globe__flag globe__dot" style={{ background: place.color }} />
           <span className="globe__label">
-            {place.name}, {place.countryCode.toUpperCase()} - <b>{content.hero.mapTagLabel}</b>
+            <b>Day {place.day}</b> · {place.title}
           </span>
         </div>
       </div>
