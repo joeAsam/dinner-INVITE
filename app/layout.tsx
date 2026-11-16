@@ -6,7 +6,7 @@ import "./ticket.css";
 const archivo = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-archivo", display: "swap" });
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", display: "swap" });
 // The home page's 3D experience shares the simple view's typefaces: Geist for big headlines and
-// JetBrains Mono for labels (here), Satoshi and Cabinet Grotesk from Fontshare (loaded by app/page.tsx).
+// JetBrains Mono for labels (here), Satoshi and Cabinet Grotesk from Fontshare (loaded by app/(site)/page.tsx).
 const atlas = Geist({ subsets: ["latin"], weight: ["600"], variable: "--font-atlas-display", display: "swap" });
 const atlasMono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-atlas-mono", display: "swap" });
 

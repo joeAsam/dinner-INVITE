@@ -31,16 +31,8 @@ export function HomeLink({ className, children }: { className?: string; children
     }
   }, []);
 
-  // A plain link for the simple view: it is a separate page with its own styles, so it gets a full page load.
-  if (home === "/simple") {
-    return (
-      <a href="/simple" className={className}>
-        {children}
-      </a>
-    );
-  }
   return (
-    <Link href="/" className={className}>
+    <Link href={home} className={className} scroll={false}>
       {children}
     </Link>
   );

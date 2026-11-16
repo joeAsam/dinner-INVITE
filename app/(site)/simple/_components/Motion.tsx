@@ -28,6 +28,10 @@ export function Motion() {
   useEffect(() => {
     // The RSVP and ticket pages send the visitor back here, not to the 3D site.
     rememberHome("/simple");
+    // The page always opens at the top: arriving from the 3D site or the RSVP page, and after a refresh
+    // (the browser is told not to restore its old position). A link to a section (#…) still lands on it.
+    history.scrollRestoration = "manual";
+    if (!location.hash) window.scrollTo(0, 0);
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const lenis = new Lenis({ autoRaf: true, anchors: true, lerp: 0.09 });

@@ -49,7 +49,7 @@ body:has(.xp) {
   outline-offset: 3px;
 }
 
-.sr-only {
+:where(.xp) .sr-only {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -60,7 +60,7 @@ body:has(.xp) {
 }
 
 /* Small uppercase labels, set in the monospace face. */
-.label {
+:where(.xp) .label {
   margin: 0;
   color: var(--ink-dim);
   font-family: var(--mono);
@@ -72,7 +72,7 @@ body:has(.xp) {
 
 /* ---------- Stage ---------- */
 
-.xp__canvas {
+:where(.xp) .xp__canvas {
   position: fixed;
   inset: 0;
   opacity: 0;
@@ -84,7 +84,7 @@ body:has(.xp) {
 }
 
 /* Darkens the side the text sits on, so it reads over any view. */
-.xp__shade {
+:where(.xp) .xp__shade {
   position: fixed;
   inset: 0;
   pointer-events: none;
@@ -99,7 +99,7 @@ body:has(.xp) {
 
 /* ---------- Buttons ---------- */
 
-.btn {
+:where(.xp) .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -121,42 +121,42 @@ body:has(.xp) {
     transform 0.1s ease;
 }
 
-.btn:hover {
+:where(.xp) .btn:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.btn:active {
+:where(.xp) .btn:active {
   transform: scale(0.98);
 }
 
-.btn--light {
+:where(.xp) .btn--light {
   border-color: #fff;
   background: #fff;
   color: #05060f;
 }
 
-.btn--light:hover {
+:where(.xp) .btn--light:hover {
   background: rgba(255, 255, 255, 0.88);
 }
 
-.btn:disabled {
+:where(.xp) .btn:disabled {
   border-color: var(--line);
   background: rgba(255, 255, 255, 0.08);
   color: var(--ink-dim);
   cursor: progress;
 }
 
-.btn--small {
+:where(.xp) .btn--small {
   padding: 0 16px;
 }
 
-.btn--big {
+:where(.xp) .btn--big {
   min-height: 52px;
   padding: 0 28px;
   font-size: 16px;
 }
 
-.chip {
+:where(.xp) .chip {
   display: inline-block;
   margin: 0;
   padding: 6px 12px;
@@ -171,61 +171,27 @@ body:has(.xp) {
   font-variant-numeric: tabular-nums;
 }
 
-.chip b {
+:where(.xp) .chip b {
   color: var(--ink);
   font-weight: 400;
 }
 
-.chip--live {
+:where(.xp) .chip--live {
   border-color: var(--amber);
   color: var(--amber);
 }
 
 /* ---------- Top bar ---------- */
 
-.top {
-  position: fixed;
-  inset: 0 0 auto;
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px var(--pad);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.8s ease;
-}
-
-.xp[data-hero="true"] .top {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.top__brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 44px;
-  padding: 0;
-  border: 0;
-  background: none;
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.top__brand em,
-.hero__title em,
-.landing__question em {
+:where(.xp) .hero__title em,
+:where(.xp) .landing__question em {
   color: var(--amber);
   font-style: normal;
 }
 
 /* ---------- Day rail ---------- */
 
-.rail {
+:where(.xp) .rail {
   position: fixed;
   top: 50%;
   right: clamp(8px, 2vw, 28px);
@@ -243,7 +209,7 @@ body:has(.xp) {
   pointer-events: auto;
 }
 
-.rail__stop {
+:where(.xp) .rail__stop {
   position: relative;
   display: flex;
   align-items: center;
@@ -257,7 +223,7 @@ body:has(.xp) {
 }
 
 /* A tick that lengthens and takes the day's colour when current. */
-.rail__stop::before {
+:where(.xp) .rail__stop::before {
   content: "";
   width: 12px;
   height: 1px;
@@ -267,18 +233,18 @@ body:has(.xp) {
     background-color 0.25s ease;
 }
 
-.rail__stop:hover::before {
+:where(.xp) .rail__stop:hover::before {
   width: 20px;
   background: #fff;
 }
 
-.rail__stop[aria-current]::before {
+:where(.xp) .rail__stop[aria-current]::before {
   width: 28px;
   height: 2px;
   background: var(--day);
 }
 
-.rail__stop span {
+:where(.xp) .rail__stop span {
   position: absolute;
   right: 44px;
   padding: 4px 10px;
@@ -298,22 +264,22 @@ body:has(.xp) {
     transform 0.2s ease;
 }
 
-.rail__stop:hover span,
-.rail__stop:focus-visible span {
+:where(.xp) .rail__stop:hover span,
+:where(.xp) .rail__stop:focus-visible span {
   opacity: 1;
   transform: none;
 }
 
 /* ---------- Map pins ---------- */
 
-.pins {
+:where(.xp) .pins {
   position: fixed;
   inset: 0;
   z-index: 12;
   pointer-events: none;
 }
 
-.pin {
+:where(.xp) .pin {
   position: absolute;
   top: 0;
   left: 0;
@@ -328,7 +294,7 @@ body:has(.xp) {
 }
 
 /* The dot sits exactly on the venue. */
-.pin > i {
+:where(.xp) .pin > i {
   position: absolute;
   top: -5px;
   left: -5px;
@@ -341,7 +307,7 @@ body:has(.xp) {
     0 0 14px var(--day);
 }
 
-.pin > span {
+:where(.xp) .pin > span {
   position: absolute;
   top: -22px;
   left: 16px;
@@ -357,7 +323,7 @@ body:has(.xp) {
   transition: border-color 0.2s ease;
 }
 
-.pin[data-side="left"] > span {
+:where(.xp) .pin[data-side="left"] > span {
   right: 16px;
   left: auto;
   border-right: 2px solid var(--day);
@@ -365,7 +331,7 @@ body:has(.xp) {
   text-align: right;
 }
 
-.pin[data-side="up"] > span {
+:where(.xp) .pin[data-side="up"] > span {
   top: auto;
   right: -14px;
   bottom: 18px;
@@ -373,33 +339,33 @@ body:has(.xp) {
   text-align: right;
 }
 
-.pin[data-side="down"] > span {
+:where(.xp) .pin[data-side="down"] > span {
   top: 16px;
   right: -14px;
   left: auto;
   text-align: right;
 }
 
-.pin:hover > span,
-.pin:focus-visible > span {
+:where(.xp) .pin:hover > span,
+:where(.xp) .pin:focus-visible > span {
   border-color: var(--day);
 }
 
-.pin b,
-.pin small {
+:where(.xp) .pin b,
+:where(.xp) .pin small {
   display: block;
 }
 
-.pin b {
+:where(.xp) .pin b {
   font-size: 13px;
   font-weight: 500;
 }
 
-.pin b em {
+:where(.xp) .pin b em {
   font-style: normal;
 }
 
-.pin small {
+:where(.xp) .pin small {
   color: var(--ink-soft);
   font-family: var(--mono);
   font-size: 10.5px;
@@ -408,37 +374,37 @@ body:has(.xp) {
 }
 
 /* A venue outside the frame: the pin waits at the screen edge and points the way. */
-.pin[data-edge="left"] > span,
-.pin[data-edge="right"] > span {
+:where(.xp) .pin[data-edge="left"] > span,
+:where(.xp) .pin[data-edge="right"] > span {
   top: -22px;
   bottom: auto;
 }
 
-.pin[data-edge="left"] > span {
+:where(.xp) .pin[data-edge="left"] > span {
   right: auto;
   left: 16px;
   text-align: left;
 }
 
-.pin[data-edge="left"] b::before {
+:where(.xp) .pin[data-edge="left"] b::before {
   content: "← ";
   color: var(--day);
 }
 
-.pin[data-edge="right"] > span {
+:where(.xp) .pin[data-edge="right"] > span {
   right: 16px;
   left: auto;
   text-align: right;
 }
 
-.pin[data-edge="right"] b::after {
+:where(.xp) .pin[data-edge="right"] b::after {
   content: " →";
   color: var(--day);
 }
 
 /* ---------- Stops ---------- */
 
-.stops {
+:where(.xp) .stops {
   position: relative;
   z-index: 10;
   opacity: 0;
@@ -449,18 +415,18 @@ body:has(.xp) {
   opacity: 1;
 }
 
-.stop {
+:where(.xp) .stop {
   height: 150vh;
   pointer-events: none;
 }
 
-.stop--hero,
-.stop--finale {
+:where(.xp) .stop--hero,
+:where(.xp) .stop--finale {
   height: 100vh;
   height: 100svh;
 }
 
-.stop__pin {
+:where(.xp) .stop__pin {
   position: sticky;
   top: 0;
   display: grid;
@@ -471,24 +437,24 @@ body:has(.xp) {
 }
 
 /* The overview keeps its title in the sky, above the map and its pins. */
-.stop--hero .stop__pin {
+:where(.xp) .stop--hero .stop__pin {
   align-items: start;
   padding-top: clamp(96px, 13vh, 132px);
 }
 
-.stop--finale .stop__pin {
+:where(.xp) .stop--finale .stop__pin {
   align-items: end;
   padding-bottom: clamp(36px, 8vh, 80px);
 }
 
 /* Hero */
 
-.hero {
+:where(.xp) .hero {
   max-width: 900px;
   will-change: opacity, transform;
 }
 
-.hero__title {
+:where(.xp) .hero__title {
   margin: 14px 0 0;
   font-size: clamp(40px, 5.6vw, 84px);
   font-weight: 500;
@@ -497,19 +463,19 @@ body:has(.xp) {
   text-wrap: balance;
 }
 
-.hero__theme {
+:where(.xp) .hero__theme {
   margin: 18px 0 0;
   font-size: clamp(20px, 2.2vw, 28px);
   letter-spacing: -0.02em;
 }
 
-.hero__meta {
+:where(.xp) .hero__meta {
   margin: 6px 0 22px;
   color: var(--ink-dim);
   font-size: 16px;
 }
 
-.hero__scroll {
+:where(.xp) .hero__scroll {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -526,7 +492,7 @@ body:has(.xp) {
   cursor: pointer;
 }
 
-.hero__scroll span {
+:where(.xp) .hero__scroll span {
   display: inline-block;
   animation: nudge 1.8s ease-in-out infinite;
 }
@@ -539,7 +505,7 @@ body:has(.xp) {
 
 /* Day card */
 
-.card {
+:where(.xp) .card {
   width: min(420px, 100%);
   padding: 26px;
   border: 1px solid var(--line);
@@ -550,14 +516,14 @@ body:has(.xp) {
   will-change: opacity, transform;
 }
 
-.card__kicker {
+:where(.xp) .card__kicker {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.card__kicker i,
-.finale__days i {
+:where(.xp) .card__kicker i,
+:where(.xp) .finale__days i {
   width: 8px;
   height: 8px;
   border-radius: 2px;
@@ -565,7 +531,7 @@ body:has(.xp) {
   box-shadow: 0 0 10px var(--day);
 }
 
-.card__title {
+:where(.xp) .card__title {
   margin: 12px 0 0;
   font-size: clamp(30px, 3.2vw, 42px);
   font-weight: 500;
@@ -574,13 +540,13 @@ body:has(.xp) {
   text-wrap: balance;
 }
 
-.card__when {
+:where(.xp) .card__when {
   margin: 10px 0 18px;
   color: var(--ink-dim);
   font-size: 15px;
 }
 
-.venue {
+:where(.xp) .venue {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -595,54 +561,54 @@ body:has(.xp) {
     border-color 0.2s ease;
 }
 
-.venue:hover {
+:where(.xp) .venue:hover {
   border-color: var(--line-strong);
   background: rgba(255, 255, 255, 0.05);
 }
 
-.venue svg {
+:where(.xp) .venue svg {
   flex: none;
   color: var(--day);
 }
 
-.venue > span:first-of-type {
+:where(.xp) .venue > span:first-of-type {
   flex: 1;
   min-width: 0;
 }
 
-.venue b,
-.venue small {
+:where(.xp) .venue b,
+:where(.xp) .venue small {
   display: block;
 }
 
-.venue b {
+:where(.xp) .venue b {
   font-size: 15px;
   font-weight: 500;
 }
 
-.venue small {
+:where(.xp) .venue small {
   color: var(--ink-soft);
   font-size: 13px;
 }
 
-.venue i {
+:where(.xp) .venue i {
   color: var(--ink-dim);
   font-style: normal;
 }
 
-.card__blurb {
+:where(.xp) .card__blurb {
   margin: 18px 0 0;
   color: var(--ink-dim);
   font-size: 15px;
 }
 
-.card__more {
+:where(.xp) .card__more {
   margin-top: 18px;
   padding-top: 16px;
   border-top: 1px solid var(--line);
 }
 
-.card__more ul {
+:where(.xp) .card__more ul {
   display: grid;
   gap: 7px;
   margin: 10px 0 0;
@@ -651,12 +617,12 @@ body:has(.xp) {
   font-size: 14.5px;
 }
 
-.card__more li {
+:where(.xp) .card__more li {
   display: flex;
   gap: 12px;
 }
 
-.card__more li::before {
+:where(.xp) .card__more li::before {
   content: "";
   flex: none;
   width: 10px;
@@ -665,7 +631,7 @@ body:has(.xp) {
   background: var(--day);
 }
 
-.card__facts {
+:where(.xp) .card__facts {
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: baseline;
@@ -674,11 +640,11 @@ body:has(.xp) {
   font-size: 14.5px;
 }
 
-.card__facts dd {
+:where(.xp) .card__facts dd {
   margin: 0;
 }
 
-.card__note {
+:where(.xp) .card__note {
   margin: 14px 0 0;
   padding: 10px 12px;
   border-left: 2px solid var(--day);
@@ -687,20 +653,20 @@ body:has(.xp) {
   font-size: 14px;
 }
 
-.card__actions {
+:where(.xp) .card__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 22px;
 }
 
-.card__toggle {
+:where(.xp) .card__toggle {
   display: none;
 }
 
 /* Finale */
 
-.finale {
+:where(.xp) .finale {
   display: grid;
   justify-items: start;
   gap: 14px;
@@ -708,7 +674,7 @@ body:has(.xp) {
   will-change: opacity, transform;
 }
 
-.finale__title {
+:where(.xp) .finale__title {
   margin: 0;
   font-size: clamp(40px, 6vw, 84px);
   font-weight: 500;
@@ -716,13 +682,13 @@ body:has(.xp) {
   letter-spacing: -0.04em;
 }
 
-.finale__lead {
+:where(.xp) .finale__lead {
   margin: 0 0 6px;
   color: var(--ink-dim);
   font-size: 18px;
 }
 
-.finale__days {
+:where(.xp) .finale__days {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -731,7 +697,7 @@ body:has(.xp) {
   list-style: none;
 }
 
-.finale__days button {
+:where(.xp) .finale__days button {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -745,11 +711,11 @@ body:has(.xp) {
   transition: border-color 0.2s ease;
 }
 
-.finale__days button:hover {
+:where(.xp) .finale__days button:hover {
   border-color: var(--day);
 }
 
-.credit {
+:where(.xp) .credit {
   position: fixed;
   right: var(--pad);
   bottom: 10px;
@@ -762,15 +728,15 @@ body:has(.xp) {
 
 /* ---------- Intro captions ---------- */
 
-.captions {
+:where(.xp) .captions {
   position: fixed;
   inset: 0;
   z-index: 25;
   pointer-events: none;
 }
 
-.captions__line,
-.captions__verbs {
+:where(.xp) .captions__line,
+:where(.xp) .captions__verbs {
   position: absolute;
   left: var(--pad);
   bottom: clamp(48px, 12vh, 120px);
@@ -786,21 +752,21 @@ body:has(.xp) {
     transform 0.7s ease;
 }
 
-.captions__line[data-on="true"],
-.captions__verbs[data-on="true"] {
+:where(.xp) .captions__line[data-on="true"],
+:where(.xp) .captions__verbs[data-on="true"] {
   opacity: 1;
   transform: none;
 }
 
-.captions__line span {
+:where(.xp) .captions__line span {
   display: block;
 }
 
-.captions__line span + span {
+:where(.xp) .captions__line span + span {
   color: var(--amber);
 }
 
-.captions__verbs {
+:where(.xp) .captions__verbs {
   display: flex;
   flex-wrap: wrap;
   gap: 6px 22px;
@@ -811,17 +777,17 @@ body:has(.xp) {
   text-transform: uppercase;
 }
 
-.captions__verbs span {
+:where(.xp) .captions__verbs span {
   color: var(--day);
   opacity: 0;
   transition: opacity 0.5s ease;
 }
 
-.captions__verbs span[data-on="true"] {
+:where(.xp) .captions__verbs span[data-on="true"] {
   opacity: 1;
 }
 
-.captions__skip {
+:where(.xp) .captions__skip {
   position: absolute;
   right: var(--pad);
   bottom: 28px;
@@ -841,7 +807,7 @@ body:has(.xp) {
 
 /* ---------- Landing question ---------- */
 
-.landing {
+:where(.xp) .landing {
   position: fixed;
   inset: 0;
   z-index: 30;
@@ -862,7 +828,7 @@ body:has(.xp) {
   }
 }
 
-.landing__question {
+:where(.xp) .landing__question {
   max-width: 15ch;
   margin: 0 0 14px;
   font-size: clamp(38px, 6.4vw, 88px);
@@ -872,7 +838,7 @@ body:has(.xp) {
   text-wrap: balance;
 }
 
-.landing__skip {
+:where(.xp) .landing__skip {
   min-height: 44px;
   padding: 0 12px;
   border: 0;
@@ -885,57 +851,57 @@ body:has(.xp) {
   cursor: pointer;
 }
 
-.landing__skip:hover {
+:where(.xp) .landing__skip:hover {
   color: var(--ink);
 }
 
 /* ---------- Phones and narrow tablets: the card becomes a bottom sheet ---------- */
 
 @media (max-width: 820px) {
-  .xp__shade {
+  :where(.xp) .xp__shade {
     background: linear-gradient(0deg, rgba(4, 5, 16, 0.9), rgba(4, 5, 16, 0.35) 44%, transparent 62%);
   }
 
-  .stop__pin {
+  :where(.xp) .stop__pin {
     align-items: end;
     padding: 76px 12px 14px;
   }
 
-  .stop--hero .stop__pin {
+  :where(.xp) .stop--hero .stop__pin {
     padding: 112px 18px 34px;
   }
 
-  .stop--finale .stop__pin {
+  :where(.xp) .stop--finale .stop__pin {
     padding: 76px 18px 34px;
   }
 
-  .card {
+  :where(.xp) .card {
     width: 100%;
     max-height: calc(100svh - 96px);
     padding: 16px;
     overflow-y: auto;
   }
 
-  .card__title {
+  :where(.xp) .card__title {
     margin-top: 8px;
     font-size: 27px;
   }
 
-  .card__when {
+  :where(.xp) .card__when {
     margin: 6px 0 12px;
     font-size: 13.5px;
   }
 
-  .venue {
+  :where(.xp) .venue {
     min-height: 48px;
     padding: 6px 12px;
   }
 
-  .venue small {
+  :where(.xp) .venue small {
     display: none;
   }
 
-  .card__blurb {
+  :where(.xp) .card__blurb {
     margin-top: 12px;
     font-size: 14.5px;
     display: -webkit-box;
@@ -944,81 +910,73 @@ body:has(.xp) {
     overflow: hidden;
   }
 
-  .card__more {
+  :where(.xp) .card__more {
     display: none;
   }
 
-  .card[data-open="true"] .card__more,
-  .card[data-open="true"] .card__blurb {
+  :where(.xp) .card[data-open="true"] .card__more,
+  :where(.xp) .card[data-open="true"] .card__blurb {
     display: block;
   }
 
-  .card__actions {
+  :where(.xp) .card__actions {
     margin-top: 14px;
   }
 
-  .card__toggle {
+  :where(.xp) .card__toggle {
     display: inline-flex;
   }
 
-  .card__next {
+  :where(.xp) .card__next {
     display: none;
   }
 
-  .rail {
+  :where(.xp) .rail {
     top: 62px;
     right: 50%;
     flex-direction: row;
     transform: translateX(50%);
   }
 
-  .rail__stop {
+  :where(.xp) .rail__stop {
     justify-content: center;
     width: 30px;
     height: 32px;
   }
 
-  .rail__stop::before,
-  .rail__stop:hover::before {
+  :where(.xp) .rail__stop::before,
+  :where(.xp) .rail__stop:hover::before {
     width: 14px;
   }
 
-  .rail__stop[aria-current]::before {
+  :where(.xp) .rail__stop[aria-current]::before {
     width: 22px;
   }
 
-  .rail__stop span {
+  :where(.xp) .rail__stop span {
     display: none;
   }
 
-  .top {
-    padding: 10px 14px;
-  }
-
-  .top__brand {
-    font-size: 14px;
-  }
-
-  .hero__title {
+  :where(.xp) .hero__title {
     font-size: clamp(38px, 11.5vw, 60px);
   }
 
-  .pin b {
+  :where(.xp) .pin b {
     font-size: 12px;
   }
 
-  .pin small,
-  .pin b em,
-  .hero__scroll {
+  :where(.xp) .pin small,
+  :where(.xp) .pin b em,
+  :where(.xp) .hero__scroll {
     display: none;
   }
 
-  .pin > span {
+  :where(.xp) .pin > span {
     padding: 4px 8px;
     font-family: var(--mono);
   }
 
-  .credit {
+  :where(.xp) .credit {
     right: auto;
     left: 18px;
     bottom: 8px;
@@ -1051,18 +1009,18 @@ body:has(.xp) {
   touch-action: none;
 }
 
-.card {
+:where(.xp) .card {
   touch-action: pan-y;
 }
 
-.stops {
+:where(.xp) .stops {
   position: fixed;
   inset: 0;
 }
 
-.stop,
-.stop--hero,
-.stop--finale {
+:where(.xp) .stop,
+:where(.xp) .stop--hero,
+:where(.xp) .stop--finale {
   position: absolute;
   inset: 0;
   display: grid;
@@ -1072,19 +1030,19 @@ body:has(.xp) {
   pointer-events: none;
 }
 
-.stop--hero {
+:where(.xp) .stop--hero {
   align-items: start;
   padding-top: clamp(104px, 14vh, 140px);
 }
 
-.stop--finale {
+:where(.xp) .stop--finale {
   align-items: end;
   padding-bottom: clamp(64px, 10vh, 96px);
 }
 
-.hero,
-.card,
-.finale {
+:where(.xp) .hero,
+:where(.xp) .card,
+:where(.xp) .finale {
   opacity: 0;
 }
 
@@ -1098,7 +1056,7 @@ body:has(.xp) {
   user-select: none;
 }
 
-.hero__hint {
+:where(.xp) .hero__hint {
   position: fixed;
   left: var(--pad);
   bottom: 40px;
@@ -1117,7 +1075,7 @@ body:has(.xp) {
   pointer-events: auto;
 }
 
-.hero__hint-drag::before {
+:where(.xp) .hero__hint-drag::before {
   content: "";
   display: inline-block;
   width: 7px;
@@ -1127,7 +1085,7 @@ body:has(.xp) {
   border-radius: 50%;
 }
 
-.hero__hint button {
+:where(.xp) .hero__hint button {
   min-height: 44px;
   padding: 0;
   border: 0;
@@ -1139,81 +1097,22 @@ body:has(.xp) {
   cursor: pointer;
 }
 
-.hero__hint button span {
+:where(.xp) .hero__hint button span {
   display: inline-block;
   animation: nudge 1.8s ease-in-out infinite;
 }
 
 /* ---------- Navbar ---------- */
 
-.top {
-  gap: 16px;
-  background: linear-gradient(180deg, rgba(4, 5, 16, 0.72), rgba(4, 5, 16, 0));
-}
-
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  padding: 4px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--panel);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-}
-
-.nav__link {
-  position: relative;
-  min-height: 36px;
-  padding: 0 14px;
-  border: 0;
-  border-radius: 7px;
-  background: none;
-  color: var(--ink-dim);
-  font-size: 14px;
-  white-space: nowrap;
-  cursor: pointer;
-  transition:
-    color 0.2s ease,
-    background-color 0.2s ease;
-}
-
-.nav__link:hover {
-  color: var(--ink);
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.nav__link[aria-current] {
-  color: var(--ink);
-  background: rgba(255, 255, 255, 0.09);
-}
-
 /* A short bar in the day's colour marks where you are. */
-.nav__link::after {
-  content: "";
-  position: absolute;
-  right: 14px;
-  bottom: 5px;
-  left: 14px;
-  height: 2px;
-  border-radius: 1px;
-  background: var(--day);
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-}
 
-.nav__link[aria-current]::after {
-  transform: scaleX(1);
-}
-
-.rail {
+:where(.xp) .rail {
   display: none;
 }
 
 /* ---------- Step arrows ---------- */
 
-.steps {
+:where(.xp) .steps {
   position: fixed;
   right: var(--pad);
   bottom: 40px;
@@ -1231,7 +1130,7 @@ body:has(.xp) {
   pointer-events: auto;
 }
 
-.steps button {
+:where(.xp) .steps button {
   width: 44px;
   height: 44px;
   border: 1px solid var(--line-strong);
@@ -1244,81 +1143,48 @@ body:has(.xp) {
     opacity 0.2s ease;
 }
 
-.steps button:hover:not(:disabled) {
+:where(.xp) .steps button:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.12);
 }
 
-.steps button:disabled {
+:where(.xp) .steps button:disabled {
   opacity: 0.35;
   cursor: default;
 }
 
-@media (max-width: 1080px) {
-  .top__brand span {
-    display: none;
-  }
-}
-
 @media (max-width: 820px) {
-  .stop,
-  .stop--finale {
+  :where(.xp) .stop,
+  :where(.xp) .stop--finale {
     align-items: end;
     padding: 124px 12px 16px;
   }
 
-  .stop--hero {
+  :where(.xp) .stop--hero {
     align-items: start;
     padding: 132px 18px 16px;
   }
 
-  .stop--finale {
+  :where(.xp) .stop--finale {
     padding: 124px 18px 30px;
   }
 
-  .card {
+  :where(.xp) .card {
     max-height: calc(100svh - 140px);
   }
 
   /* The navbar drops to its own row under the brand and RSVP. */
-  .top {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .top__brand span {
-    display: inline;
-  }
-
-  .nav {
-    order: 3;
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .nav__link {
-    flex: 1;
-    min-height: 40px;
-    padding: 0 2px;
-    font-size: 12.5px;
-    letter-spacing: -0.01em;
-  }
-
-  .nav__link::after {
-    right: 30%;
-    left: 30%;
-  }
 
 
-  .hero__hint {
+  :where(.xp) .hero__hint {
     left: 18px;
     bottom: 26px;
   }
 
-  .hero__hint-drag::after {
+  :where(.xp) .hero__hint-drag::after {
     content: " ·";
   }
 
-  .steps {
+  :where(.xp) .steps {
     display: none;
   }
 }
@@ -1327,176 +1193,41 @@ body:has(.xp) {
 /* One-line navbar and fully rounded buttons (applies at every width). */
 /* ================================================================== */
 
-.top {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 12px;
-}
-
-.top__brand {
-  justify-self: start;
-  min-width: 0;
-}
-
-.top__end {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 6px;
-  min-width: 0;
-}
-
-.top__simple {
-  display: inline-flex;
-  align-items: center;
-  min-height: 40px;
-  padding: 0 14px;
-  border: 1px solid var(--line-strong);
-  border-radius: 999px;
-  background: var(--panel);
-  color: var(--ink-dim);
-  font-size: 14px;
-  white-space: nowrap;
-  text-decoration: none;
-  transition:
-    color 0.2s ease,
-    background-color 0.2s ease;
-}
-
-.top__simple:hover {
-  color: var(--ink);
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.top__simple-short {
-  display: none;
-}
-
 /* Every button is a full pill or circle. */
-.btn,
-.btn--small,
-.btn--big,
-.chip,
-.nav,
-.nav__link,
-.finale__days button,
-.captions__skip,
-.pin > span,
-.pin[data-side="left"] > span {
+:where(.xp) .btn,
+:where(.xp) .btn--small,
+:where(.xp) .btn--big,
+:where(.xp) .chip,
+:where(.xp) .finale__days button,
+:where(.xp) .captions__skip,
+:where(.xp) .pin > span,
+:where(.xp) .pin[data-side="left"] > span {
   border-radius: 999px;
 }
 
-.steps button {
+:where(.xp) .steps button {
   border-radius: 50%;
 }
 
-.pin > span {
+:where(.xp) .pin > span {
   padding: 6px 14px;
-}
-
-.nav__link::after {
-  right: 18px;
-  left: 18px;
-}
-
-@media (max-width: 1080px) {
-  .top__brand span {
-    display: none;
-  }
 }
 
 @media (max-width: 820px) {
   /* Still one line on a phone: logo, the five days, Simple, RSVP. */
-  .top {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    flex-wrap: nowrap;
-    gap: 6px;
-    padding: 10px 10px;
-  }
-
-  .top__brand span {
-    display: none;
-  }
-
-  .nav {
-    order: 0;
-    width: auto;
-    min-width: 0;
-    justify-content: space-between;
-    padding: 3px;
-    gap: 0;
-  }
-
-  .nav__link {
-    flex: 1 1 0;
-    min-width: 0;
-    min-height: 34px;
-    padding: 0 4px;
-    font-size: 11.5px;
-    letter-spacing: -0.02em;
-  }
-
-  .nav__link::after {
-    right: 28%;
-    left: 28%;
-    bottom: 4px;
-  }
-
-  .top__end {
-    gap: 4px;
-  }
-
-  .top__simple {
-    min-height: 36px;
-    padding: 0 9px;
-    font-size: 11.5px;
-  }
-
-  .top__simple-long {
-    display: none;
-  }
-
-  .top__simple-short {
-    display: inline;
-  }
-
-  .top .btn--small {
-    min-height: 36px;
-    padding: 0 10px;
-    font-size: 12px;
-  }
 
   /* The header is a single row now, so the content can start higher. */
-  .stop,
-  .stop--finale {
+  :where(.xp) .stop,
+  :where(.xp) .stop--finale {
     padding-top: 76px;
   }
 
-  .stop--hero {
+  :where(.xp) .stop--hero {
     padding-top: 84px;
   }
 
-  .card {
+  :where(.xp) .card {
     max-height: calc(100svh - 92px);
-  }
-}
-
-@media (max-width: 400px) {
-  .nav__link {
-    font-size: 10.5px;
-    padding: 0 2px;
-  }
-
-  .top__simple {
-    padding: 0 7px;
-    font-size: 10.5px;
-  }
-
-  .top .btn--small {
-    padding: 0 8px;
-    font-size: 11px;
   }
 }
 
@@ -1504,136 +1235,30 @@ body:has(.xp) {
 /* Tablet and phone navbar: smaller, lighter, with room to breathe.    */
 /* ================================================================== */
 
-@media (max-width: 1080px) {
-  .top {
-    grid-template-columns: 1fr auto 1fr;
-    gap: 10px;
-    padding: 14px 18px;
-  }
-
-  .nav {
-    gap: 0;
-    padding: 3px;
-  }
-
-  .nav__link {
-    flex: 0 0 auto;
-    min-height: 30px;
-    padding: 0 11px;
-    font-size: 12.5px;
-    letter-spacing: 0;
-  }
-
-  .nav__link::after {
-    right: 11px;
-    left: 11px;
-    bottom: 4px;
-    height: 1.5px;
-  }
-
-  .top__end {
-    gap: 6px;
-  }
-
-  .top__simple,
-  .top .btn--small {
-    min-height: 32px;
-    padding: 0 13px;
-    font-size: 12.5px;
-  }
-
-  .top__brand svg {
-    width: 22px;
-    height: 22px;
-  }
-}
-
 @media (max-width: 820px) {
-  .top {
-    grid-template-columns: auto 1fr auto;
-    gap: 8px;
-    padding: 12px 14px;
-  }
 
   /* The day links sit centred with space either side, rather than stretching edge to edge. */
-  .nav {
-    justify-self: center;
-    width: auto;
-    padding: 2px;
-  }
 
-  .nav__link {
-    flex: 0 0 auto;
-    min-height: 28px;
-    padding: 0 7px;
-    font-size: 11px;
-  }
-
-  .nav__link::after {
-    right: 7px;
-    left: 7px;
-    bottom: 3px;
-  }
-
-  .top__end {
-    gap: 5px;
-  }
-
-  .top__simple,
-  .top .btn--small {
-    min-height: 28px;
-    padding: 0 10px;
-    font-size: 11px;
-  }
-
-  .top__brand svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .stop,
-  .stop--finale {
+  :where(.xp) .stop,
+  :where(.xp) .stop--finale {
     padding-top: 64px;
   }
 
-  .stop--hero {
+  :where(.xp) .stop--hero {
     padding-top: 72px;
   }
 
-  .card {
+  :where(.xp) .card {
     max-height: calc(100svh - 80px);
-  }
-}
-
-@media (max-width: 400px) {
-  .top {
-    gap: 6px;
-    padding: 12px 10px;
-  }
-
-  .nav__link {
-    padding: 0 5px;
-    font-size: 10.5px;
-  }
-
-  .nav__link::after {
-    right: 5px;
-    left: 5px;
-  }
-
-  .top__simple,
-  .top .btn--small {
-    padding: 0 8px;
-    font-size: 10.5px;
   }
 }
 
 /* ---------- Map pins: just the day number ---------- */
 
-.pin > span,
-.pin[data-side="left"] > span,
-.pin[data-side="up"] > span,
-.pin[data-side="down"] > span {
+:where(.xp) .pin > span,
+:where(.xp) .pin[data-side="left"] > span,
+:where(.xp) .pin[data-side="up"] > span,
+:where(.xp) .pin[data-side="down"] > span {
   top: -13px;
   right: auto;
   bottom: auto;
@@ -1646,7 +1271,7 @@ body:has(.xp) {
   text-align: center;
 }
 
-.pin b {
+:where(.xp) .pin b {
   font-family: var(--font-atlas-mono), ui-monospace, monospace;
   font-size: 12px;
   font-weight: 500;
@@ -1654,19 +1279,19 @@ body:has(.xp) {
   color: var(--day);
 }
 
-.pin:hover > span,
-.pin:focus-visible > span {
+:where(.xp) .pin:hover > span,
+:where(.xp) .pin:focus-visible > span {
   border-color: var(--day);
 }
 
 /* Off-screen venues keep their arrow toward the venue. */
-.pin[data-edge="right"] > span {
+:where(.xp) .pin[data-edge="right"] > span {
   right: 12px;
   left: auto;
 }
 
 /* Day 1 and Day 5 share DE Exchange: Day 1's number sits on the other side of the dot. */
-.pin[data-side="down"]:not([data-edge="left"]):not([data-edge="right"]) > span {
+:where(.xp) .pin[data-side="down"]:not([data-edge="left"]):not([data-edge="right"]) > span {
   right: 12px;
   left: auto;
 }
@@ -1690,70 +1315,302 @@ html:has(.xp) {
 }
 
 /* Big headlines: Geist semibold, set tight. */
-.hero__title,
-.landing__question,
-.finale__title,
-.captions__line {
+:where(.xp) .hero__title,
+:where(.xp) .landing__question,
+:where(.xp) .finale__title,
+:where(.xp) .captions__line {
   font-family: var(--font-atlas-head);
   font-weight: 600;
   letter-spacing: -0.03em;
 }
 
 /* Headings and body: Satoshi. */
-.card__title {
+:where(.xp) .card__title {
   font-family: var(--sans);
   font-weight: 500;
   letter-spacing: -0.025em;
 }
 
-.hero__theme {
+:where(.xp) .hero__theme {
   font-family: var(--sans);
   font-weight: 500;
   letter-spacing: -0.02em;
 }
 
-.venue b {
+:where(.xp) .venue b {
   font-weight: 700;
 }
 
 /* Navbar, buttons and the wordmark: Cabinet Grotesk. */
-.top__brand,
-.nav__link,
-.top__simple,
-.btn,
-.finale__days button,
-.steps button,
-.captions__skip {
+:where(.xp) .btn,
+:where(.xp) .finale__days button,
+:where(.xp) .steps button,
+:where(.xp) .captions__skip {
   font-family: var(--font-atlas-nav);
 }
 
-.top__brand {
-  font-weight: 700;
-  letter-spacing: 0.01em;
-}
-
-.nav__link,
-.top__simple {
-  font-weight: 500;
-  letter-spacing: 0.005em;
-}
-
-.btn {
+:where(.xp) .btn {
   font-weight: 500;
   letter-spacing: 0.01em;
 }
 
 /* The light (primary) buttons carry the weight, as in the simple view. */
-.btn--light {
+:where(.xp) .btn--light {
   font-weight: 700;
 }
 
-.finale__days button {
+:where(.xp) .finale__days button {
   font-weight: 500;
 }
 
 /* The skip link reads as a label, like the simple view's mono captions. */
-.landing__skip,
-.captions__skip {
+:where(.xp) .landing__skip,
+:where(.xp) .captions__skip {
   font-family: var(--mono);
+}
+
+/* ================================================================== */
+/* Navbar: the same bar as the simple view (logo, links, RSVP; a menu  */
+/* button below 1024px). Hidden until the overview appears.            */
+/* ================================================================== */
+
+:where(.xp) .bar {
+  --bar-h: 64px;
+  --brand-gradient: linear-gradient(135deg, #ff8a3d, #f26f21 55%, #d9481a);
+  --brand-glow: rgba(242, 111, 33, 0.8);
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 20;
+  border-bottom: 1px solid transparent;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+  font-family: var(--font-atlas-nav);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.8s ease,
+    background-color 0.3s,
+    border-color 0.3s;
+}
+
+.xp[data-hero="true"] .bar {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+:where(.xp) .bar[data-open="true"] {
+  background: rgba(0, 0, 0, 0.86);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom-color: var(--line);
+}
+
+:where(.xp) .bar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: 1280px;
+  height: var(--bar-h);
+  margin-inline: auto;
+  padding-inline: var(--pad);
+}
+
+:where(.xp) .bar__logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+:where(.xp) .bar__logo em {
+  color: #f26f21;
+  font-style: normal;
+}
+
+:where(.xp) .bar__links {
+  display: none;
+  gap: 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+:where(.xp) .bar__link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: var(--bar-h);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink-dim);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+/* Underline: white on hover, the day's colour for the day you are on. */
+:where(.xp) .bar__link::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 18px;
+  height: 1.5px;
+  background: var(--day, var(--ink));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s;
+}
+
+:where(.xp) .bar__link:hover,
+:where(.xp) .bar__link[aria-current] {
+  color: var(--ink);
+}
+
+:where(.xp) .bar__link:hover::after,
+:where(.xp) .bar__link[aria-current]::after {
+  transform: scaleX(1);
+}
+
+:where(.xp) .bar__end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+:where(.xp) .bar__cta {
+  display: none;
+  position: relative;
+  overflow: hidden;
+  padding: 6px 16px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--brand-gradient);
+  box-shadow: 0 8px 28px -10px var(--brand-glow);
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    filter 0.2s,
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.35s;
+}
+
+:where(.xp) .bar__cta:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 34px -10px var(--brand-glow);
+}
+
+:where(.xp) .bar__toggle {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+:where(.xp) .bar__menu {
+  height: calc(100dvh - var(--bar-h));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px var(--pad) 24px;
+  border-top: 1px solid var(--line);
+  background: #000;
+}
+
+:where(.xp) .bar__menu[hidden] {
+  display: none;
+}
+
+:where(.xp) .bar__menu ul {
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+:where(.xp) .bar__item {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 18px;
+  font-weight: 500;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+:where(.xp) .bar__item small {
+  color: var(--ink-soft);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+:where(.xp) .bar__item[aria-current] {
+  color: var(--day, var(--ink));
+}
+
+:where(.xp) .bar__menu .bar__cta {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 44px;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+@media (min-width: 1024px) {
+  :where(.xp) .bar__inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+  }
+
+  :where(.xp) .bar__logo {
+    justify-self: start;
+  }
+
+  :where(.xp) .bar__links {
+    display: flex;
+  }
+
+  :where(.xp) .bar__cta {
+    display: inline-block;
+  }
+
+  :where(.xp) .bar__toggle,
+  :where(.xp) .bar__menu {
+    display: none;
+  }
 }

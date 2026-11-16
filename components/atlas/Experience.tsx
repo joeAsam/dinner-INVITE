@@ -1,12 +1,14 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { memo, useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import Link from "next/link";
+import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { dayLabel, dayLong, event, time12, weekRange, weekState } from "@/lib/content";
 import { DAY_COLORS, LAST_STOP } from "@/lib/atlas/journey";
 import { VENUES } from "@/lib/venues";
 import { INTRO_SECONDS, world } from "@/lib/atlas/world";
 import { rememberHome } from "../HomeLink";
+import { MusicButton } from "../MusicButton";
 import { Logo } from "../Logo";
 
 // Memoised: the scene only depends on a stable callback, so page state changes never touch it.
@@ -112,7 +114,10 @@ function IntroCaptions({ onTitle, onDone, onSkip }: { onTitle: () => void; onDon
 }
 
 /** True when the event started on something the visitor can operate or read by scrolling. */
-const onControl = (target: EventTarget | null) => target instanceof Element && !!target.closest("a, button, .card, .landing");
+const onControl = (target: EventTarget | null) => target instanceof Element && !!target.closest("a, button, .card, .landing, .bar");
+
+/** The day stops (between the overview and RSVP), with their stop index. */
+const DAY_STOPS = STOPS.slice(1, LAST_STOP).map((s, k) => ({ s, i: k + 1 }));
 
 /** Set once the 3D page has mounted in this document, so coming back to it client-side skips the intro. */
 let mountedBefore = false;
@@ -143,6 +148,7 @@ export function Experience() {
   const [active, setActive] = useState(0);
   const [open, setOpen] = useState<number | null>(null);
   const [grabbing, setGrabbing] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const at = useRef(0);
   const introDecided = useRef<boolean | null>(null);
 
@@ -158,7 +164,8 @@ export function Experience() {
   }, []);
 
   // First load: skip the intro for reduced motion, the ?at= / ?skip shortcuts, and any visit from inside the site.
-  useEffect(() => {
+  // A layout effect, so coming back from the simple view never flashes the "Are you ready?" screen for a frame.
+  useLayoutEffect(() => {
     rememberHome("/");
     world.reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const params = new URLSearchParams(location.search);
@@ -175,6 +182,21 @@ export function Experience() {
       if (target > 0) goTo(target, true);
     }
   }, [goTo]);
+
+  // The phone/tablet menu closes with Escape, and on its own when the window grows to the desktop bar.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const wide = window.matchMedia("(min-width: 1024px)");
+    const close = () => setMenuOpen(false);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
+    const onWide = () => wide.matches && close();
+    window.addEventListener("keydown", onKey);
+    wide.addEventListener("change", onWide);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      wide.removeEventListener("change", onWide);
+    };
+  }, [menuOpen]);
 
   // One scroll, swipe or key press moves exactly one stop. At any stop but the finale, dragging turns the camera.
   useEffect(() => {
@@ -194,6 +216,8 @@ export function Experience() {
 
     const onWheel = (e: WheelEvent) => {
       touched();
+      // Scrolling inside the open menu scrolls the menu, not the journey.
+      if (e.target instanceof Element && e.target.closest(".bar__menu")) return;
       if (e.ctrlKey) {
         e.preventDefault();
         if (at.current !== LAST_STOP && world.flight.t >= 1) world.orbit.zoom *= Math.exp(e.deltaY * 0.004);
@@ -357,7 +381,6 @@ export function Experience() {
 
   const onReady = useCallback(() => setReady(true), []);
   const year = `’${String(event.year).slice(2)}`;
-  const accent = active >= 1 && active <= 5 ? DAY_COLORS[active - 1] : "#ffffff";
 
   return (
     <div className="xp" data-phase={phase} data-hero={heroIn} data-ready={ready} data-home={active === 0} data-turnable={active !== LAST_STOP} data-grabbing={grabbing}>
@@ -390,47 +413,110 @@ export function Experience() {
         ))}
       </div>
 
-      <header className="top">
-        <button type="button" className="top__brand" onClick={() => goTo(0)} aria-label={`${event.name}: back to the overview`}>
-          <Logo size={24} />
-          <span>
-            {event.name} <em>{year}</em>
-          </span>
-        </button>
+      {/* The same navbar as the simple view: logo, days and "Simple view", RSVP; a menu below 1024px. */}
+      <header className="bar" data-open={menuOpen}>
+        <nav className="bar__inner" aria-label="Main">
+          <button
+            type="button"
+            className="bar__logo"
+            onClick={() => {
+              goTo(0);
+              setMenuOpen(false);
+            }}
+            aria-label={`${event.name}: back to the overview`}
+          >
+            <Logo size={24} />
+            <span>
+              {event.name} <em>{year}</em>
+            </span>
+          </button>
 
-        <nav className="nav" aria-label="Days" style={{ "--day": accent } as CSSProperties}>
-          {STOPS.slice(1, LAST_STOP).map((s, k) => {
-            const i = k + 1;
-            return (
-              <button
-                key={s.id}
-                type="button"
-                className="nav__link"
-                style={{ "--day": DAY_COLORS[i - 1] } as CSSProperties}
-                aria-current={active === i ? "page" : undefined}
-                title={s.title}
-                onClick={() => goTo(i)}
-              >
-                {s.nav}
+          <ul className="bar__links">
+            {DAY_STOPS.map(({ s, i }) => (
+              <li key={s.id}>
+                <button
+                  type="button"
+                  className="bar__link"
+                  style={{ "--day": DAY_COLORS[i - 1] } as CSSProperties}
+                  aria-current={active === i ? "page" : undefined}
+                  title={s.title}
+                  onClick={() => goTo(i)}
+                >
+                  {s.nav}
+                </button>
+              </li>
+            ))}
+            <li>
+              {/* Switches inside the app (no reload), so the music plays on. The simple view is prefetched. */}
+              <Link className="bar__link" href="/simple" scroll={false}>
+                Simple view
+              </Link>
+            </li>
+          </ul>
+
+          <div className="bar__end">
+            <MusicButton />
+            {rsvpReady ? (
+              <a className="bar__cta" href={event.rsvpUrl}>
+                RSVP
+              </a>
+            ) : (
+              <button type="button" className="bar__cta" onClick={() => goTo(LAST_STOP)}>
+                RSVP
               </button>
-            );
-          })}
+            )}
+            <button
+              type="button"
+              className="bar__toggle"
+              aria-expanded={menuOpen}
+              aria-controls="xp-menu"
+              aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+              onClick={() => setMenuOpen((v) => !v)}
+            >
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                {menuOpen ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+              </svg>
+            </button>
+          </div>
         </nav>
 
-        <div className="top__end">
-          {/* A plain link (not client-side routing): the simple view is a separate page with its own styles. */}
-          <a className="top__simple" href="/simple">
-            <span className="top__simple-long">Simple view</span>
-            <span className="top__simple-short" aria-hidden="true">
-              Simple
-            </span>
-          </a>
+        <div id="xp-menu" className="bar__menu" hidden={!menuOpen}>
+          <ul>
+            {DAY_STOPS.map(({ s, i }) => (
+              <li key={s.id}>
+                <button
+                  type="button"
+                  className="bar__item"
+                  style={{ "--day": DAY_COLORS[i - 1] } as CSSProperties}
+                  aria-current={active === i ? "page" : undefined}
+                  onClick={() => {
+                    goTo(i);
+                    setMenuOpen(false);
+                  }}
+                >
+                  {s.nav} <small>{event.days[i - 1]?.title}</small>
+                </button>
+              </li>
+            ))}
+            <li>
+              <Link className="bar__item" href="/simple" scroll={false}>
+                Simple view
+              </Link>
+            </li>
+          </ul>
           {rsvpReady ? (
-            <a className="btn btn--light btn--small" href={event.rsvpUrl}>
+            <a className="bar__cta" href={event.rsvpUrl}>
               RSVP
             </a>
           ) : (
-            <button type="button" className="btn btn--light btn--small" aria-current={active === LAST_STOP ? "page" : undefined} onClick={() => goTo(LAST_STOP)}>
+            <button
+              type="button"
+              className="bar__cta"
+              onClick={() => {
+                goTo(LAST_STOP);
+                setMenuOpen(false);
+              }}
+            >
               RSVP
             </button>
           )}

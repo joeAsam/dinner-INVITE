@@ -1,0 +1,104 @@
+/* Music mute / unmute button, shared by the 3D page and the simple view. */
+
+.music {
+  position: relative;
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition:
+    border-color 0.25s,
+    background-color 0.25s,
+    box-shadow 0.35s,
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.music:hover {
+  border-color: rgba(255, 138, 61, 0.55);
+  background: rgba(242, 111, 33, 0.12);
+  transform: translateY(-1px);
+}
+
+.music:active {
+  transform: scale(0.94);
+}
+
+.music:focus-visible {
+  outline: 2px solid #ff8a3d;
+  outline-offset: 3px;
+}
+
+.music[data-playing="true"] {
+  border-color: rgba(255, 138, 61, 0.45);
+  box-shadow: 0 0 18px -6px rgba(242, 111, 33, 0.8);
+}
+
+.music > * {
+  grid-area: 1 / 1;
+  transition:
+    opacity 0.25s,
+    transform 0.25s;
+}
+
+/* Equaliser bars while playing; a muted speaker while paused. */
+.music__bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
+}
+
+.music__bars i {
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #ff8a3d, #f26f21 55%, #d9481a);
+  transform-origin: 50% 100%;
+  transform: scaleY(0.3);
+}
+
+.music[data-playing="true"] .music__bars i {
+  animation: music-eq 1s ease-in-out infinite;
+}
+
+.music__bars i:nth-child(2) {
+  animation-delay: -0.4s !important;
+}
+
+.music__bars i:nth-child(3) {
+  animation-delay: -0.7s !important;
+}
+
+.music__bars i:nth-child(4) {
+  animation-delay: -0.2s !important;
+}
+
+@keyframes music-eq {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.music[data-playing="false"] .music__bars,
+.music[data-playing="true"] .music__off {
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .music[data-playing="true"] .music__bars i {
+    animation: none;
+    transform: scaleY(0.7);
+  }
+}
