@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, JetBrains_Mono } from "next/font/google";
 import { content } from "./content";
+import "lenis/dist/lenis.css";
 import "./pxxl.css";
 
 const geist = Geist({ subsets: ["latin"], weight: ["600"], variable: "--font-geist" });

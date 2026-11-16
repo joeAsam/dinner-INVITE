@@ -39,8 +39,8 @@ export const content = {
       ...event.days.map((d) => ({ label: `Day ${d.day}`, href: `/?at=day${d.day}` })),
       { label: "3D Experience", href: "/" },
     ],
-    /* Opens the RSVP stop at the end of the 3D experience. */
-    button: { label: "RSVP", href: "/?at=rsvp" },
+    /* Opens the RSVP page (name, email, ticket). */
+    button: { label: "RSVP", href: event.rsvpUrl },
     openMenuLabel: "Open navigation menu",
     closeMenuLabel: "Close navigation menu",
   },

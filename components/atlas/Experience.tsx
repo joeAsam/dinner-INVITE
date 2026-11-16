@@ -113,6 +113,28 @@ function IntroCaptions({ onTitle, onDone, onSkip }: { onTitle: () => void; onDon
 /** True when the event started on something the visitor can operate or read by scrolling. */
 const onControl = (target: EventTarget | null) => target instanceof Element && !!target.closest("a, button, .card, .landing");
 
+/** Set once the 3D page has mounted in this document, so coming back to it client-side skips the intro. */
+let mountedBefore = false;
+
+/**
+ * The intro plays when someone arrives at the site from outside, or refreshes the 3D page.
+ * Moving around inside the site (a logo, "3D Experience", back from the RSVP page) goes straight to the overview.
+ */
+function introWanted() {
+  if (mountedBefore) return false;
+  const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+  // The page was loaded on another route (RSVP, ticket) and reached "/" through client-side routing.
+  if (nav && new URL(nav.name).pathname !== "/") return false;
+  if (nav?.type === "reload") return true;
+  // A full page load from another page of this site, such as the simple view.
+  try {
+    if (document.referrer && new URL(document.referrer).origin === location.origin) return false;
+  } catch {
+    // An unreadable referrer counts as arriving from outside.
+  }
+  return true;
+}
+
 export function Experience() {
   const [phase, setPhase] = useState<Phase>("landing");
   const [ready, setReady] = useState(false);
@@ -121,6 +143,7 @@ export function Experience() {
   const [open, setOpen] = useState<number | null>(null);
   const [grabbing, setGrabbing] = useState(false);
   const at = useRef(0);
+  const introDecided = useRef<boolean | null>(null);
 
   /** Fly to a stop. Everything that navigates goes through here. */
   const goTo = useCallback((index: number, instant = false) => {
@@ -133,13 +156,17 @@ export function Experience() {
     setOpen(null);
   }, []);
 
-  // First load: honour reduced motion and the ?at= / ?skip shortcuts by skipping the intro.
+  // First load: skip the intro for reduced motion, the ?at= / ?skip shortcuts, and any visit from inside the site.
   useEffect(() => {
     world.reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const params = new URLSearchParams(location.search);
     const asked = (params.get("at") ?? "").replace("-", "");
     const target = STOPS.findIndex((s) => s.id === asked || (asked === "top" && s.id === "home"));
-    if (world.reduced || params.has("skip") || target >= 0) {
+    // Decided once per mount (dev mode runs this effect twice).
+    introDecided.current ??= introWanted();
+    mountedBefore = true;
+    const intro = introDecided.current;
+    if (world.reduced || params.has("skip") || target >= 0 || !intro) {
       world.journey = true;
       setHeroIn(true);
       setPhase("journey");
@@ -396,9 +423,15 @@ export function Experience() {
               Simple
             </span>
           </a>
-          <button type="button" className="btn btn--light btn--small" aria-current={active === LAST_STOP ? "page" : undefined} onClick={() => goTo(LAST_STOP)}>
-            RSVP
-          </button>
+          {rsvpReady ? (
+            <a className="btn btn--light btn--small" href={event.rsvpUrl}>
+              RSVP
+            </a>
+          ) : (
+            <button type="button" className="btn btn--light btn--small" aria-current={active === LAST_STOP ? "page" : undefined} onClick={() => goTo(LAST_STOP)}>
+              RSVP
+            </button>
+          )}
         </div>
       </header>
 
@@ -476,9 +509,15 @@ export function Experience() {
                 </div>
 
                 <div className="card__actions">
-                  <button type="button" className="btn btn--light" onClick={() => goTo(LAST_STOP)}>
-                    RSVP
-                  </button>
+                  {rsvpReady ? (
+                    <a className="btn btn--light" href={event.rsvpUrl}>
+                      RSVP
+                    </a>
+                  ) : (
+                    <button type="button" className="btn btn--light" onClick={() => goTo(LAST_STOP)}>
+                      RSVP
+                    </button>
+                  )}
                   <button type="button" className="btn card__toggle" aria-expanded={expanded} aria-controls={`more-${d.day}`} onClick={() => setOpen(expanded ? null : i)}>
                     {expanded ? "Less" : "Details"}
                   </button>

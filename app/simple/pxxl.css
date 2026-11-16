@@ -1480,6 +1480,196 @@ details[open] .faq__mark {
   }
 }
 
+/* ---------- Motion ---------- */
+
+:where(.pxxl) {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Lenis animates the scroll itself; the browser's own smoothing would fight it. */
+html.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+/* Hero: the copy rises in once on load (pure CSS, so there is no flash before scripts run). */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.hero__title,
+.hero__lead,
+.hero__actions,
+.logos {
+  animation: rise 0.9s var(--ease-out) both;
+}
+
+.hero__lead {
+  animation-delay: 0.12s;
+}
+
+.hero__actions {
+  animation-delay: 0.24s;
+}
+
+.logos {
+  animation-delay: 0.4s;
+}
+
+.hero__map {
+  animation: fade 1.6s ease-out 0.1s both;
+}
+
+/* Reveal on scroll: Motion.tsx tags what starts below the fold, then flips it to "in". */
+[data-reveal] {
+  transition:
+    opacity 0.8s var(--ease-out) var(--reveal-delay, 0ms),
+    transform 0.8s var(--ease-out) var(--reveal-delay, 0ms),
+    filter 0.8s var(--ease-out) var(--reveal-delay, 0ms);
+}
+
+[data-reveal=""] {
+  opacity: 0;
+  transform: translateY(32px);
+  filter: blur(4px);
+}
+
+/* Reading progress along the top edge, driven by the scroll position where the browser supports it. */
+.progress {
+  display: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .progress {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 60;
+    display: block;
+    height: 2px;
+    background: var(--brand-gradient);
+    box-shadow: 0 0 12px var(--brand-glow);
+    transform-origin: 0 50%;
+    animation: progress linear both;
+    animation-timeline: scroll(root);
+    pointer-events: none;
+  }
+
+  @keyframes progress {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+}
+
+/* Buttons: lift, glow and a light sweep across the ember ones. */
+.btn,
+.nav__cta {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition:
+    background-color 0.25s,
+    color 0.25s,
+    border-color 0.25s,
+    box-shadow 0.35s var(--ease-out),
+    filter 0.25s,
+    transform 0.35s var(--ease-spring);
+}
+
+.btn--primary::after,
+.nav__cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.38) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.7s var(--ease-out);
+}
+
+@media (hover: hover) {
+  .btn:hover,
+  .nav__cta:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn--primary:hover {
+    box-shadow:
+      0 0 0 1px var(--btn-primary-ring),
+      0 16px 48px -10px var(--brand-glow);
+  }
+
+  .nav__cta:hover {
+    box-shadow: 0 12px 34px -10px var(--brand-glow);
+  }
+
+  .btn--primary:hover::after,
+  .nav__cta:hover::after {
+    transform: translateX(120%);
+  }
+
+  .btn--secondary:hover {
+    border-color: rgba(255, 138, 61, 0.45);
+    box-shadow: 0 10px 30px -14px var(--brand-glow);
+  }
+
+  /* Small things that should feel touchable. */
+  .faq__item,
+  .foot__socials a {
+    transition:
+      background-color 0.25s,
+      transform 0.35s var(--ease-spring);
+  }
+
+  .faq__item:hover {
+    background-color: rgba(255, 255, 255, 0.025);
+  }
+
+  .foot__socials a:hover {
+    transform: translateY(-3px);
+  }
+
+  .logos__item {
+    transition:
+      opacity 0.25s,
+      transform 0.35s var(--ease-spring);
+  }
+
+  .logos__item:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.btn:active,
+.nav__cta:active {
+  transform: scale(0.97);
+  transition-duration: 0.1s;
+}
+
+.btn:focus-visible,
+.nav__cta:focus-visible {
+  outline: 2px solid var(--brand-text);
+  outline-offset: 3px;
+}
+
 /* ---------- Reduced motion ---------- */
 
 @media (prefers-reduced-motion: reduce) {
@@ -1491,6 +1681,7 @@ details[open] .faq__mark {
   :where(.pxxl) *::before,
   :where(.pxxl) *::after {
     animation-duration: 0.01ms !important;
+    animation-timeline: auto !important;
     animation-delay: 0s !important;
     transition-duration: 0.01ms !important;
   }

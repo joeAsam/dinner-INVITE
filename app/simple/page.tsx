@@ -7,6 +7,7 @@ import { Footer } from "./_components/Footer";
 import { Hero } from "./_components/Hero";
 import { Nav } from "./_components/Nav";
 import { Stats } from "./_components/Stats";
+import { Motion } from "./_components/Motion";
 
 /** Simple View: the Pxxl homepage rebuild, served at /simple in place of the old day list. */
 export default function SimplePage() {
@@ -16,6 +17,7 @@ export default function SimplePage() {
         {content.brand.skipLink}
       </a>
       <div className="grain" aria-hidden="true" />
+      <Motion />
       <Nav />
       <main id="main">
         <Hero />
