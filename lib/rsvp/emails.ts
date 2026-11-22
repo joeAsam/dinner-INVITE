@@ -35,7 +35,7 @@ function shell(preheader: string, body: string) {
 ${body}
 <tr><td colspan="2" align="center" style="padding:28px 16px 0;font-size:12px;line-height:18px;color:${MUTED};">
 <span style="font-family:${DISPLAY};font-weight:800;letter-spacing:2px;color:${TEXT};">YOUTH CHOIR WEEK <span style="color:${EMBER};">${yy}</span></span><br>
-${h(event.theme)} · ${weekRange()} · ${h(event.city)}, ${h(event.state)}<br>
+${h(event.theme || event.host)} · ${weekRange()} · ${h(event.city)}, ${h(event.state)}<br>
 You are receiving this because you RSVP’d on the Youth Choir Week invite.
 </td></tr>
 </table></td></tr></table></body></html>`;

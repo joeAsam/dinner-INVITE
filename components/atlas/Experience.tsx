@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
+import { Fragment, memo, useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { dayLabel, dayLong, event, time12, weekRange, weekState } from "@/lib/content";
 import { DAY_COLORS, LAST_STOP } from "@/lib/atlas/journey";
 import { VENUES } from "@/lib/venues";
@@ -27,10 +27,13 @@ const STOPS = [
 const rsvpReady = !event.rsvpUrl.startsWith("#");
 
 /** Intro captions, timed against the light spreading through the streets (seconds, text). */
+// The words are in lib/content.ts (intro).
 const CAPTIONS: { at: number; until: number; lines: string[] }[] = [
-  { at: 1, until: 4.1, lines: ["From wherever you are,", "your voice belongs here"] },
-  { at: 4.3, until: 6, lines: [`in ${event.city}, ${event.state}.`] },
+  { at: 1, until: 4.1, lines: event.intro[0] },
+  { at: 4.3, until: 6, lines: event.intro[1] },
 ];
+/** The three words that light up one by one after the captions. */
+const TAGLINE = ["Just.", "Come.", "Prepared."];
 const VERBS_AT = 6.1;
 const VERB_GAP = 0.55;
 const TITLE_AT = 8.9;
@@ -100,9 +103,9 @@ function IntroCaptions({ onTitle, onDone, onSkip }: { onTitle: () => void; onDon
         </p>
       ))}
       <p className="captions__verbs" data-on={beat >= VERBS_AT && beat < TITLE_AT}>
-        {event.days.map((d, i) => (
-          <span key={d.day} data-on={beat >= VERBS_AT + i * VERB_GAP} style={{ "--day": DAY_COLORS[i] } as CSSProperties}>
-            {d.verb}
+        {TAGLINE.map((word, i) => (
+          <span key={word} data-on={beat >= VERBS_AT + i * VERB_GAP} style={{ "--day": DAY_COLORS[(i * 2) % DAY_COLORS.length] } as CSSProperties}>
+            {word}
           </span>
         ))}
       </p>
@@ -537,12 +540,13 @@ export function Experience() {
             }}
           >
             <p className="label">
-              {event.city} · {event.state} · {event.country}
+              {event.host} · {event.city}, {event.state}
             </p>
             <h1 className="hero__title">
               {event.name} <em>{year}</em>
             </h1>
-            <p className="hero__theme">{event.theme}</p>
+            {event.theme && <p className="hero__theme">{event.theme}</p>}
+            <p className="hero__about">{event.about}</p>
             <p className="hero__meta">
               {weekRange()} · {event.days.length} days, {new Set(event.days.map((d) => d.venue)).size} venues
             </p>
@@ -631,8 +635,15 @@ export function Experience() {
             }}
           >
             <p className="label">{weekRange()}</p>
-            <h2 className="finale__title">See you in {event.city}.</h2>
-            <p className="finale__lead">Five days, one choir. Bring your voice.</p>
+            <h2 className="finale__title">
+              {event.finaleTitle.split(event.finaleHighlight).map((part, i, all) => (
+                <Fragment key={i}>
+                  {part}
+                  {i < all.length - 1 && <em>{event.finaleHighlight}</em>}
+                </Fragment>
+              ))}
+            </h2>
+            <p className="finale__lead">{event.finaleLead}</p>
             {rsvpReady ? (
               <a className="btn btn--light btn--big" href={event.rsvpUrl}>
                 RSVP now

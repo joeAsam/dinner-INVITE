@@ -184,6 +184,7 @@ body:has(.xp) {
 /* ---------- Top bar ---------- */
 
 :where(.xp) .hero__title em,
+:where(.xp) .finale__title em,
 :where(.xp) .landing__question em {
   color: var(--amber);
   font-style: normal;
@@ -470,6 +471,14 @@ body:has(.xp) {
   margin: 18px 0 0;
   font-size: clamp(20px, 2.2vw, 28px);
   letter-spacing: -0.02em;
+}
+
+:where(.xp) .hero__about {
+  max-width: 34rem;
+  margin: 12px 0 0;
+  color: var(--ink-dim);
+  font-size: 16px;
+  line-height: 1.55;
 }
 
 :where(.xp) .hero__meta {

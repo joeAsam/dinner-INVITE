@@ -55,7 +55,7 @@ export const content = {
     titleStart: "Beyond the",
     rotatingWords: ["music", "outings", "conversations"],
     titleEnd: "Into the memories.",
-    lead: "Five days of friendship, fun and unforgettable memories. From the conference to the grand finale, we're bringing the family together for an experience beyond the music.",
+    lead: event.about, // edit it in lib/content.ts (about), shared with the 3D overview
     primaryButton: { label: "RSVP", href: event.rsvpUrl },
     secondaryButton: { label: "See Events", href: "#features" },
     logosLabel: "THE WEEK WE'VE BEEN WAITING FOR.",
@@ -167,7 +167,7 @@ export const content = {
 
   /* ---------- Footer ---------- */
   footer: {
-    tagline: `${event.theme}.`,
+    tagline: event.theme || event.host,
     copyright: "© TAC Field Temple Youth Choir  •  MMXXVI",
     /* Icons exist for "Facebook", "Instagram", "TikTok" and "X". Add a line to list another. */
     socialLabelPrefix: "Field Temple Youth Choir on", // read aloud as "Field Temple Youth Choir on Facebook"
